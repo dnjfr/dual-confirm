@@ -2,14 +2,21 @@
 
 # DualConfirm - Dynamic password authentication system
 
-A secure authentication system for financial institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
+A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
 
-## 🌎 Select language;
+## 🌎 Select language
 [![en](https://img.shields.io/badge/English-red.svg)](README.md)
 [![fr](https://img.shields.io/badge/French-fr-green.svg)](README.fr.md)
 
-## Purpose 
-Le but de ce projet est de remettre le conseiller et le client au coeur de l'authentification 
+## ❗ Purpose 
+Following recent cyber attacks worldwide, particularly in France, large amounts of personal data, including IBAN numbers, have been stolen.
+
+Scammers are exploiting these data breaches by posing as advisors, especially bank representatives, to gain their victims' trust and access their accounts.
+In the face of these threats, securing communications between clients and their advisors has become crucial.
+
+This project proposes a simple solution: allowing clients and advisors to mutually verify their identity through their application before any sensitive exchange.
+
+The goal is to put both the advisor and the client at the center of the authentication process.
 
 
 ## 🔑 Key features
@@ -39,12 +46,12 @@ Le but de ce projet est de remettre le conseiller et le client au coeur de l'aut
   - Graceful disconnection handling
   - WebSocket-based real-time updates
 
-## Example usage
+## 📞 Example usage
 ```
-Client: "Hello, this is Mr. Dupont."
-Advisor: "Hello Mr. Dupont, this is Mr. Albert from Crédit Mutuel. Could you confirm your client password shown on your interface?"
-Client: "My password is 'colibri'. Could you confirm your advisor password?"
-Advisor: "My password is 'tulipe'."
+Client: "Hello, this is Mr. Smth."
+Advisor: "Hello Mr. Smth, this is Mr. Williams from Fictional Company. Could you confirm your client password shown on your interface?"
+Client: "My password is 'weather'. Could you confirm your advisor password?"
+Advisor: "My password is 'diamond'."
 ```
 
 
@@ -87,16 +94,16 @@ Advisor: "My password is 'tulipe'."
 
 ### Prerequisites
 - Docker and Docker Compose
-- Python 3.x
+- Python 3.11+
 - Node.js and npm
-- OpenSSL (for local HTTPS setup)
+- OpenSSL (optional, for local HTTPS setup)
 
 ### Installation
 <details>
 <summary>Follow the guide ⬇️</summary>
 <br>
 
-**1.** Clone the repository
+**1.** Clone the repository:
 ```bash
 git clone <repository-url>
 ```
@@ -120,7 +127,7 @@ npm init
 }
 ```
 
-**5.** Create `.env` file with the following variables 
+**5.** Create `.env` file with the following variables:
 
 <details>
 <summary>List of environnements variables used ⬇️</summary>
@@ -175,31 +182,31 @@ npm init
 <br>
 
 
-**6.** Generate Redis ACL files
+**6.** Generate Redis ACL files:
 ```bash
 python utils/generate_users_acl.py
 ```
 
-**7.** Start the Docker containers
+**7.** Start the Docker containers:
 ```bash
 docker compose up -d
 ```
 
-**8.** Set up databases
+**8.** Set up databases:
 <details>
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
   **8.1.** Access pgAdmin at http://localhost:5050/
 
-  **8.2.** Configure Users Database Server:
+  **8.2.** Configure users database server:
   - Host: 172.25.0.5
   - Port: 5432
   - Database: DC_PG_USERS
   - Username: `<your_identifier_for_users_base>`
   - Password: `<your_password_for_users_base>`
 
-  **8.3.** Configure Audit Database Server:
+  **8.3.** Configure audit database server:
   - Host: 172.25.0.6
   - Port: 5432
   - Database: DC_PG_AUDIT
@@ -213,21 +220,21 @@ docker compose up -d
 
 **8.4.** Access RedisInsight at http://localhost:5540/
 
-  **8.5.** Configure Common Words DB instance:
+  **8.5.** Configure common words database instance:
   - Host: 172.25.0.2
   - Port: 6379
-  - Database: DC_RD_Words
+  - Database: DC_RD_WORDS
   - Username: `<your_identifier_for_common_words_base>`
   - Password: `<your_password_for_common_words_base>`
 
-  **8.6.** Configure Passwords DB instance:
+  **8.6.** Configure passwords database instance:
   - Host: 172.25.0.3
   - Port: 6389
   - Database: DC_RD_PASSWORDS
   - Username: `<your_identifier_for_generated_passwords_base>`
   - Password: `<your_password_for_generated_passwords_base>`
 
-  **8.7.** Configure Sessions DB instance:
+  **8.7.** Configure sessions database instance:
   - Host: 172.25.0.4
   - Port: 6399
   - Database: DC_RD_SESSIONS_USERS
@@ -242,12 +249,12 @@ docker compose up -d
 python setup_db_creation_population.py
 ```
 
-**10.** Generate SSL certificates for HTTPS
+**10.** Generate SSL certificates for HTTPS:
 ```bash
 python utils/setup_ssl.py
 ```
 
-**11.** Start the application
+**11.** Start the application:
 ```bash
 # Terminal 1: Start password generation service
 python passwords_generation.py
@@ -259,7 +266,7 @@ python app.py
 
 ## 🔒 Security considerations
 
-- Passwords are automatically rotated every 60 seconds
+- Passwords are automatically rotated every 30 seconds
 - All database instances are isolated and run on separate Docker containers
 - Passwords are hashed using bcrypt
 - Session management includes automatic timeouts and activity monitoring
