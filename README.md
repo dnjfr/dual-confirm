@@ -14,7 +14,7 @@ A secure authentication system for critical institutions that generates synchron
 * [Example Usage](#-example-usage)
 * [Architecture](#%EF%B8%8F-architecture)
 * [Getting Started](#-getting-started)
-* [Security Notes - For development only](#-security-notes)
+* [Security Notes - For development only](#-security-notes---for-development-only)
 * [Contributing](#-contributing)
 * [License](#-license)
 
@@ -74,7 +74,9 @@ Advisor: "My password is 'diamond'."
 
 ### Global scheme
 
-
+<p align="center">
+<img width="350" src="/git-img/global-scheme.png"/>
+</p>
 
 ### Redis databases
 1. **Common words database (Instance 1)**
