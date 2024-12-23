@@ -2,22 +2,23 @@
 
 # DualConfirm - Dynamic password authentication system
 
-A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
-
-## 🌎 Select language
 <p align="center">
 [![en](https://img.shields.io/badge/English-red.svg)](README.md)
 [![fr](https://img.shields.io/badge/French-fr-green.svg)](README.fr.md)
 </p>
 
-* [Purpose](https://github.com/dnjfr/dual-confirm#-purpose)
-* [Key Features](https://github.com/dnjfr/dual-confirm#-key-features)
-* [Example Usage](https://github.com/dnjfr/dual-confirm#-example-usage)
-* [Architecture](https://github.com/dnjfr/dual-confirm#-architecture)
-* [Getting Started](https://github.com/dnjfr/dual-confirm#-getting-started)
+A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
+
+## 👩‍💻 Table of Contents
+
+* [Purpose](#-purpose)
+* [Key Features](#-key-features)
+* [Example Usage](#-example-usage)
+* [Architecture](#-architecture)
+* [Getting Started](#-getting-started)
 * [Security Considerations](https://github.com/dnjfr/dual-security-considerations)
-* [Contributing](https://github.com/dnjfr/dual-confirm#-contributing)
-* [License](https://github.com/dnjfr/dual-confirm#-license)
+* [Contributing](#-contributing)
+* [License](#-license)
 
 ## 📔 Purpose 
 Following recent cyber attacks worldwide, particularly in France, large amounts of personal data, including IBAN numbers, have been stolen.
