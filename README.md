@@ -75,13 +75,13 @@ Advisor: "My password is 'diamond'."
 ### Global scheme
 
 <p align="center">
-<img width="800" src="/git-img/global-scheme.png"/>
+<img width="1000" src="/git-img/global-scheme.png"/>
 </p>
 
 ### Redis databases
 1. **Common words database (Instance 1)**
    - Stores dictionary words for password generation
-   - Key format: `word:wd_xxxxx`
+   - Key format: `word:word_id`
 
 2. **Password pairs database (Instance 2)**
    - Stores temporary generated passwords
