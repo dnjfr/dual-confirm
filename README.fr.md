@@ -3,7 +3,7 @@
 [![en](https://img.shields.io/badge/English-green.svg)](README.md)
 [![fr](https://img.shields.io/badge/French-fr-blue.svg)](README.fr.md)
 
-Un système d'authentification sécurisé pour les institutions critiques qui génère des mots de passe dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors des appels téléphoniques.
+Un système d'authentification sécurisé pour les institutions critiques qui génère des mots de passe dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors d'appels téléphoniques.
 
 ## 👩‍💻 Table des matières
 
