@@ -2,8 +2,8 @@
 
 # DualConfirm - Dynamic password authentication system
 
-[![en](https://img.shields.io/badge/English-red.svg)](README.md)
-[![fr](https://img.shields.io/badge/French-fr-green.svg)](README.fr.md)
+[![en](https://img.shields.io/badge/English-green.svg)](README.md)
+[![fr](https://img.shields.io/badge/French-fr-blue.svg)](README.fr.md)
 
 A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
 
@@ -14,7 +14,7 @@ A secure authentication system for critical institutions that generates synchron
 * [Example Usage](#-example-usage)
 * [Architecture](#-architecture)
 * [Getting Started](#-getting-started)
-* [Security Considerations](https://github.com/dnjfr/dual-security-considerations)
+* [Security Considerations](#-security-considerations)
 * [Contributing](#-contributing)
 * [License](#-license)
 
