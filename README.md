@@ -12,9 +12,9 @@ A secure authentication system for critical institutions that generates synchron
 * [Purpose](#-purpose)
 * [Key Features](#-key-features)
 * [Example Usage](#-example-usage)
-* [Architecture](#-architecture)
+* [Architecture](#%EF%B8%8F-architecture)
 * [Getting Started](#-getting-started)
-* [Security Considerations](#-security-considerations)
+* [Security Notes - For development only](#-security-notes)
 * [Contributing](#-contributing)
 * [License](#-license)
 
@@ -43,12 +43,19 @@ The goal is to put both the advisor and the client at the center of the authenti
   - Mutual verification process during phone calls
   - Real-time synchronization between client and advisor interfaces
 
-- **Security architecture**
-  - Separate Redis instances for common words, password pairs, and user sessions
-  - Segregated PostgreSQL databases for user management and audit logging
-  - Complete session management with automatic timeouts
-  - HTTPS support with SSL/TLS encryption
-  - JWT-based authentication
+- **Security Architecture & Considerations**
+  - Infrastructure Isolation
+    - Separate Redis instances for common words, password pairs, and user sessions
+    - Segregated PostgreSQL databases for user management and audit logging
+    - All database instances run on isolated Docker containers
+  - Authentication & Session Management
+    - JWT-based authentication
+    - Automatic password rotation every 30 seconds
+    - Complete session management with automatic timeouts
+    - Comprehensive audit logging of all authentication attempts and password generations
+  - Encryption & Data Protection
+    - HTTPS support with SSL/TLS encryption for all communications
+    - Password hashing using bcrypt
 
 - **Advanced session management**
   - Automatic session timeout after 180 seconds of inactivity
@@ -276,22 +283,11 @@ python app.py
 ```
 </details>
 
-## 🔒 Security Considerations
+## 🔒 Security Notes - For development only
 
-- Passwords are automatically rotated every 30 seconds
-- All database instances are isolated and run on separate Docker containers
-- Passwords are hashed using bcrypt
-- Session management includes automatic timeouts and activity monitoring
-- SSL/TLS encryption for all communications
-- Complete audit logging of all authentication attempts and password generations
-
-### Security Notes - For development only
-
-- Default test passwords:
-    ```
-    Clients: "mypassword"
-    Advisors: "mypassword2"
-    ```
+- Default test passwords used for the project :
+  - Clients: `mypassword`
+  - Advisors: `mypassword2`
 - Production deployments should use proper password management
 - HTTPS certificates are self-signed for development
 
