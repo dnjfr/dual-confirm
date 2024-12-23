@@ -1,7 +1,19 @@
 # DualConfirm - Système d'authentification par mot de passe dynamique
 
-[![en](https://img.shields.io/badge/English-green.svg)](README.md)
-[![fr](https://img.shields.io/badge/French-fr-blue.svg)](README.fr.md)
+<p align="center">
+<a href="README.md"><img src="https://img.shields.io/badge/English-green.svg" /></a>
+<a href="README.fr.md"><img src="https://img.shields.io/badge/French-fr-blue.svg" /></a>
+</p>
+
+<p align="center">
+<img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" />
+<img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
+<img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
+<img src="https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+<img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
+<img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
+<img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white" />
+</p>
 
 Un système d'authentification sécurisé pour les institutions critiques qui génère des mots de passe dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors d'appels téléphoniques.
 
@@ -29,7 +41,7 @@ L'objectif est de remettre le conseiller et le client au cœur de l'authentifica
 
 - **Génération de mots de passe dynamiques**
   - Génération en temps réel de mots de passe uniques pour chaque paire client-conseiller
-  - Les mots de passe changent toutes les 60 secondes pendant que les utilisateurs sont actifs
+  - Les mots de passe changent toutes les 30 secondes pendant que les utilisateurs sont actifs
   - Utilise des mots courants du dictionnaire (min 6 - max 9 lettres) pour une meilleure mémorisation
   - Système évolutif capable de gérer des milliers de paires de mots de passe simultanément
 

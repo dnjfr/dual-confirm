@@ -5,6 +5,9 @@ from datetime import datetime
 from src.db_management.db_configurations import get_audit_db_connection, passwords_generation_audit_tablename, redis_words, redis_passwords, redis_users_sessions, redis_set, redis_get 
 
 
+delay_regeneration = 30 # TTL - Time period between password expiration and renewal"-
+
+
 # Check connection status function
 def is_connected(user_id=None, advisor_id=None):
     """
@@ -51,7 +54,7 @@ def is_active(user_id=None, advisor_id=None):
     return redis_get(redis_users_sessions, active_key) == "active"
 
 # On-demand generation with memoization function
-def generate_password_on_demand(user_id, advisor_id, timer=30):
+def generate_password_on_demand(user_id, advisor_id, timer=delay_regeneration):
     """
     Generate passwords on demand with memoization to avoid duplicates
     """

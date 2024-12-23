@@ -8,6 +8,8 @@ from src.authentification.init_otp_manager import init_otp_management
 
 load_dotenv(override=True)
 
+
+
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET")

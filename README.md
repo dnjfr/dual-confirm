@@ -44,7 +44,7 @@ The goal is to put both the advisor and the client at the center of the authenti
 
 - **Dynamic password generation**
   - Real-time generation of unique passwords for each client-advisor pair
-  - Passwords change every 60 seconds while users are active
+  - Passwords change every 30 seconds while users are active
   - Uses common dictionary words (min 6 - max 9 letters) for better memorability
   - Scalable system capable of handling thousands of simultaneous password pairs
 
