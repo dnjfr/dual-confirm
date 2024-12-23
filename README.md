@@ -4,6 +4,14 @@
 
 [![en](https://img.shields.io/badge/English-green.svg)](README.md)
 [![fr](https://img.shields.io/badge/French-fr-blue.svg)](README.fr.md)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![Javascript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![Node](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
+
 
 A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
 
@@ -16,7 +24,6 @@ A secure authentication system for critical institutions that generates synchron
 * [Getting Started](#-getting-started)
 * [Security Notes - For development only](#-security-notes---for-development-only)
 * [Contributing](#-contributing)
-* [License](#-license)
 
 ## 📔 Purpose 
 Following recent cyber attacks worldwide, particularly in France, large amounts of personal data, including IBAN numbers, have been stolen.
@@ -296,7 +303,3 @@ python app.py
 ## 🤝 Contributing
 
 This is a learning project and contributions are welcome. Please feel free to submit pull requests or open issues.
-
-## 📝 License
-
-[Choose an appropriate license and add it here]

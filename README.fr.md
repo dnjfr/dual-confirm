@@ -14,7 +14,6 @@ Un système d'authentification sécurisé pour les institutions critiques qui g�
 * [Pour commencer](#-pour-commencer)
 * [Notes de sécurité - Pour le développement uniquement](#-notes-de-sécurité---pour-le-développement-uniquement)
 * [Contribution](#-contribution)
-* [Licence](#-licence)
 
 ## 📔 Objectif
 Suite à de récentes attaques informatiques dans le monde, en particulier en France, de nombreuses données personnelles, incluant des IBAN, ont été volées.
@@ -292,7 +291,3 @@ python app.py
 ## 🤝 Contribution
 
 Ceci est un projet d'apprentissage et les contributions sont les bienvenues. N'hésitez pas à soumettre des pull requests ou à ouvrir des issues.
-
-## 📝 Licence
-
-[Choisissez une licence appropriée et ajoutez-la ici]
