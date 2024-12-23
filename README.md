@@ -5,10 +5,21 @@
 A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
 
 ## 🌎 Select language
+<p align="center">
 [![en](https://img.shields.io/badge/English-red.svg)](README.md)
 [![fr](https://img.shields.io/badge/French-fr-green.svg)](README.fr.md)
+</p>
 
-## ❗ Purpose 
+* [Purpose](https://github.com/dnjfr/dual-confirm#-purpose)
+* [Key Features](https://github.com/dnjfr/dual-confirm#-key-features)
+* [Example Usage](https://github.com/dnjfr/dual-confirm#-example-usage)
+* [Architecture](https://github.com/dnjfr/dual-confirm#-architecture)
+* [Getting Started](https://github.com/dnjfr/dual-confirm#-getting-started)
+* [Security Considerations](https://github.com/dnjfr/dual-security-considerations)
+* [Contributing](https://github.com/dnjfr/dual-confirm#-contributing)
+* [License](https://github.com/dnjfr/dual-confirm#-license)
+
+## 📔 Purpose 
 Following recent cyber attacks worldwide, particularly in France, large amounts of personal data, including IBAN numbers, have been stolen.
 
 Scammers are exploiting these data breaches by posing as advisors, especially bank representatives, to gain their victims' trust and access their accounts.
@@ -19,12 +30,12 @@ This project proposes a simple solution: allowing clients and advisors to mutual
 The goal is to put both the advisor and the client at the center of the authentication process.
 
 
-## 🔑 Key features
+## 🔑 Key Features
 
 - **Dynamic password generation**
   - Real-time generation of unique passwords for each client-advisor pair
   - Passwords change every 60 seconds while users are active
-  - Uses French dictionary words (minimum 6 letters) for better memorability
+  - Uses common dictionary words (min 6 - max 9 letters) for better memorability
   - Scalable system capable of handling thousands of simultaneous password pairs
 
 - **Dual authentication flow**
@@ -46,16 +57,18 @@ The goal is to put both the advisor and the client at the center of the authenti
   - Graceful disconnection handling
   - WebSocket-based real-time updates
 
-## 📞 Example usage
+## 📞 Example Usage
 ```
 Client: "Hello, this is Mr. Smth."
 Advisor: "Hello Mr. Smth, this is Mr. Williams from Fictional Company. Could you confirm your client password shown on your interface?"
 Client: "My password is 'weather'. Could you confirm your advisor password?"
 Advisor: "My password is 'diamond'."
 ```
-
-
 ## 🏗️ Architecture
+
+### Global scheme
+
+
 
 ### Redis databases
 1. **Common words database (Instance 1)**
@@ -90,7 +103,7 @@ Advisor: "My password is 'diamond'."
      - `passwords_audit`: Password generation history
      - `session_audit`: Session tracking and security events
 
-## 🚀 Getting started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Docker and Docker Compose
@@ -264,7 +277,7 @@ python app.py
 ```
 </details>
 
-## 🔒 Security considerations
+## 🔒 Security Considerations
 
 - Passwords are automatically rotated every 30 seconds
 - All database instances are isolated and run on separate Docker containers
@@ -273,7 +286,7 @@ python app.py
 - SSL/TLS encryption for all communications
 - Complete audit logging of all authentication attempts and password generations
 
-## ⚠️ Security notes - For development only
+### Security Notes - For development only
 
 - Default test passwords:
     ```
