@@ -1,0 +1,82 @@
+{
+  "connexion" : {
+    "message": "Connexion",
+    "description": "Titre de la page de connexion"
+  },
+  "user_identifier" : {
+    "message": "Identifiant de l'utilisateur",
+    "description": "Identifiant de connexion"
+  },
+  "user_password" : {
+    "message": "Mot de passe",
+    "description": "Mot de passe"
+  },
+  "login" : {
+    "message": "Se connecter",
+    "description": "Bouton de connexion"
+  },
+  "incorrect_username_or_password" : {
+    "message": "Nom d'utilisateur ou mot de passe incorrect.",
+    "description": "Message d'erreur de connexion"
+  },
+  "welcome" : {
+    "message": "Bienvenue",
+    "description": "Message de bienvenue"
+  },
+  "client_advisor" : {
+    "message": "Votre conseiller(e)",
+    "description": "Conseiller du client"
+  },
+  "logout" : {
+    "message": "Se déconnecter",
+    "description": "Bouton de déconnexion"
+  },
+  "personnal_dashboard" : {
+    "message": "Votre espace personnel",
+    "description": "Titre de l'espace personnel"
+  },
+  "address" : {
+    "message": "Adresse",
+    "description": "Adresse du client"
+  },
+  "auth" : {
+    "message": "Authentification",
+    "description": "Titre de la box d'authentification"
+  },
+  "password_client_to_advisor" : {
+    "message": "Mot de passe à confirmer à votre conseiller :",
+    "description": "Mot de passe à confirmer au conseiller"
+  },
+  "password_client_from_advisor" : {
+    "message": "Mot de passe que votre conseiller doit vous confirmer :",
+    "description": "Mot de passe que le conseiller doit confirmer au client"
+  },
+  "advisor_dashboard" : {
+    "message": "Dashboard Conseiller",
+    "description": "Titre de la page du conseiller"
+  },
+  "client_info" : {
+    "message": "Informations client",
+    "description": "Informations client"
+  },
+  "select_client" : {
+    "message": "-- Selectionnez un client --",
+    "description": "Selectionnez un client"
+  },
+  "client_name_label" : {
+    "message": "Nom du client :",
+    "description": "Nom du client"
+  },
+  "password_advisor_to_client" : {
+    "message": "Mot de passe à confirmer à votre client :",
+    "description": "Mot de passe que le conseiller doit confirmer au client"
+  },
+  "password_advisor_from_client" : {
+    "message": "Mot de passe que votre client doit vous confirmer :",
+    "description": "Mot de passe que le client doit confirmer au conseiller"
+  },
+  "updating": {
+    "message": "Actualisation en cours...",
+    "description": "Message lors de l'actualisation des mots de passe"
+  }
+}

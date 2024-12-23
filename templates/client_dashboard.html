@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title data-i18n="personnal_dashboard"></title>
+        <link rel="stylesheet" href="/static/style.css">
+        <script src="https://unpkg.com/i18next@24.2.0/dist/umd/i18next.min.js"></script>
+        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    </head>
+    <body data-user-id="{{ session['user_id'] }}"> 
+        <div class="container">
+            <header>
+                <h1><span data-i18n="welcome"></span> {{ client_user_name }}</h1>
+                <h2><span data-i18n="client_advisor"></span> : {{ advisor_user_name }}</h2>
+                <a href="{{ url_for('logout') }}" class="logout-btn" data-i18n="logout"></a>
+            </header>
+            <main>
+                <h3 data-i18n="personnal_dashboard"></h3>
+                    <div class="titles">
+                        <div class="address-title" data-i18n="address"></div>
+                        <div class="auth-title" data-i18n="auth"></div>
+                    </div>
+                    <div class="content">
+                        <div class="client-details">
+                        <div class="address">{{ client_address }}</div>
+                        <div class="city">{{ client_city }}</div>
+                        <div class="email">{{ client_email }}</div>
+                    </div>
+                    <div class="client-auth">
+                        <div class="boxes">
+                            <div class="password-box">
+                                <div class="instruction" data-i18n="password_client_to_advisor"></div>
+                                <div class="password">
+                                    <span id="client_pwd" class="display-layer">{{ client.user_pwd }}</span>
+                                </div>
+                            </div>
+                            <div class="password-box">
+                                <div class="instruction" data-i18n="password_client_from_advisor"></div>
+                                <div class="password">
+                                    <span id="advisor_client_pwd" class="display-layer">{{ advisor_client.advisor_pwd }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timer-container">
+                        <div class="timer">
+                            <div class="circle" id="circle_client"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script type="module">
+            import { updatePasswords } from './static/updatePasswords.js';
+            import { initI18n, localizeContent } from "./static/localization/localizeContent.js";
+            
+            document.addEventListener("DOMContentLoaded", async () => {
+                try {
+                    const userId = document.body.dataset.userId;
+                    const client_pwd = document.getElementById('client_pwd');
+                    const advisor_client_pwd = document.getElementById('advisor_client_pwd');
+                    
+                    await initI18n();
+                    localizeContent();
+                    
+                    const socket = io();
+                    
+                    if (userId && client_pwd && advisor_client_pwd) {
+                        updatePasswords(socket, userId, client_pwd, advisor_client_pwd);
+                    } else {
+                        console.error('Unable to find userId, client_pwd ou advisor_client_pwd');
+                    }
+                    
+                    // Fallback for older browsers
+                    window.addEventListener('beforeunload', () => {
+                        socket.emit('disconnect_user', { user_id: userId });
+                    });
+                    
+                    // Reconnection management
+                    let isReconnecting = false; 
+                    if (!isReconnecting) {
+                        isReconnecting = true;
+                        socket.emit('reconnect_user', { user_id: userId }, (response) => {
+                            isReconnecting = false;
+                            if (response && response.status === 'reconnected') {
+                                socket.emit('request_update', { user_id: userId });
+                            } 
+                        });
+                    }
+                    
+                    // Periodic reset of connection status
+                    setInterval(() => {
+                        socket.emit('heartbeat', { user_id: userId });
+                    }, 15000);
+                    
+                    // Periodic verification of session duration
+                    setInterval(() => {
+                        socket.emit('check_session_duration', { user_id: userId });
+                    }, 60000);
+                    
+                } catch (error) {
+                    console.error('Error during initialization:', error);
+                }
+            });
+        </script>
+    </body>
+</html>

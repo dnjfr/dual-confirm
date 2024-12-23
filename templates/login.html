@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://unpkg.com/i18next@24.2.0/dist/umd/i18next.min.js"></script>
+        <title data-i18n="connexion"></title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <div class="container">
+            <main>
+                <form id="loginForm" action="/login" method="POST">
+                    <h1 data-i18n="connexion"></h1>
+                    <label for="username" data-i18n="user_identifier"></label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password" data-i18n="user_password"></label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit" class="login-btn" data-i18n="login"></button>
+                </form>
+            </main>
+        </div>
+        {% if message %}
+        <div id="toast" class="toast" style="display: none;" data-i18n="incorrect_username_or_password"></div>
+        {% endif %}
+
+        <script type="module">
+            import { initI18n, localizeContent } from "./static/localization/localizeContent.js";
+            
+            await initI18n();
+            localizeContent();
+
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+        </script>
+    </body>
+</html>

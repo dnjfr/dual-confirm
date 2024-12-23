@@ -1,0 +1,17 @@
+.env
+/ssl_certificates
+/node_modules
+**/legacy
+**/noauth
+**/redis-conf/redis-*/*.acl
+**/redis-*-data/*
+package*
+.idea
+.venv
+.vscode
+compare*
+**/mini-dumps
+*-OK.*
+*-legacy.*
+*-noauth.*
+*DRAFT*

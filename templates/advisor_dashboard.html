@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="advisor_dashboard"></title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/i18next@24.2.0/dist/umd/i18next.min.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><span data-i18n="welcome"></span> {{ advisor_name }}</h1>
+            <h2 data-i18n="advisor_dashboard"></h2>
+            <a href="{{ url_for('logout') }}" class="logout-btn" data-i18n="logout"></a>
+        </header>
+        <main>
+            <h3 data-i18n="client_info"></h3>
+            <div class="select-box">
+                <select id="client-select" name="client-select">
+                    <option value="" class="empty-option" data-i18n="select_client"></option>
+                    {% for client in clients %}
+                        <option value="{{ client[0] }}">{{ client[0] }} {{ client[1] }} {{ client[2] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="content">
+                <div class="border">
+                    <div class="client-details" style="display: none;"></div>
+                    <div id="client-auth"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { updatePasswords } from './static/updatePasswords.js';
+        import { resetTimer } from "./static/timerManagement.js";
+        import { clientDisplay } from './static/clientDisplay.js';
+        import { initI18n, localizeContent } from "./static/localization/localizeContent.js";
+
+        const clientSelect = document.getElementById('client-select');
+        const clientAuthDiv = document.getElementById('client-auth');
+        
+        let currentClientSocket = null;
+        let globalAdvisorSocket = null;
+        
+        // Complete cleaning of sockets and interface function
+        const resetClientView = (currentClientSocket) => {
+            // Disconnect and clean the previous socket
+            if (currentClientSocket) {
+                // Unsubscribe from all listeners
+                currentClientSocket.off('connect');
+                currentClientSocket.off('update_passwords');
+                currentClientSocket.off('disconnect');
+                
+                // Close the connection completely
+                currentClientSocket.disconnect();
+                currentClientSocket = null;
+            }
+            
+            // Reset interface
+            clientAuthDiv.textContent = "";
+            resetTimer("circle_client");
+        };
+        
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                
+                const advisorId = "{{ session['advisor_id'] }}";
+                
+                await initI18n();
+                localizeContent(); 
+
+                // Creating a global socket for the advisor
+                globalAdvisorSocket = io();
+                
+                // Global Heartbeat for the Advisor
+                const globalHeartbeatInterval = setInterval(() => {
+                    if (globalAdvisorSocket) {
+                        globalAdvisorSocket.emit('heartbeat', { advisor_id: advisorId });
+                    }
+                }, 15000);
+                
+                // Periodic verification of session duration
+                const globalCheckSessionInterval = setInterval(() => {
+                    if (globalAdvisorSocket) {
+                        globalAdvisorSocket.emit('check_session_duration', { advisor_id: advisorId });
+                    }
+                }, 60000);
+                
+                // Advisor disconnection management
+                window.addEventListener('beforeunload', () => {
+                    if (globalAdvisorSocket) {
+                        globalAdvisorSocket.emit('disconnect_user', { advisor_id: advisorId });
+                    }
+                });
+                
+                // Advisor reconnection management
+                let isGlobalReconnecting = false;
+                window.addEventListener('load', () => {
+                    if (!isGlobalReconnecting && globalAdvisorSocket) {
+                        isGlobalReconnecting = true;
+                        globalAdvisorSocket.emit('reconnect_user', { advisor_id: advisorId }, (response) => {
+                            isGlobalReconnecting = false;
+                            if (response && response.status === 'reconnected') {
+                                // Reset page state if necessary
+                                console.log('Advisor reconnected');
+                            }
+                        });
+                    }
+                });
+                
+                clientSelect.addEventListener('change', () => {
+                                
+                    // Completel clean of the interface and sockets before any new processing
+                    resetClientView(currentClientSocket);
+                    
+                    let userId = clientSelect.value;
+                    const advisorId = "{{ session['advisor_id'] }}";
+                    
+                    // If no client is selected, we stop
+                    if (userId === "") {
+                        console.log("No client selected.");
+                        userId = "Empty";
+                    }   
+                    
+                    // Creating a new client-specific socket
+                    currentClientSocket = io();
+                    
+                    fetch(`/client-auth?user_id=${userId}&advisor_id=${advisorId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${sessionStorage.getItem('jwt_token')}`,
+                        }
+                    })
+                    .then(response => {
+                        if (response.status === 400) {
+                            console.error('Error: No client selected.');
+                            resetClientView(currentClientSocket);
+                            return null;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (!data || data.error) {
+                            console.error(data ? data.error : 'Unknown error');
+                            resetClientView(currentClientSocket);
+                            return;
+                        }
+                        
+                        // Displays client data
+                        clientDisplay(clientAuthDiv, data, localizeContent);
+                        
+                        // Initialize the socket after rendering the HTML content
+                        const clientPwdElement = document.getElementById("client_pwd");
+                        const advisorPwdElement = document.getElementById("advisor_client_pwd");
+                        
+                        // Only initialize passwords if a client is selected
+                        if (clientPwdElement && advisorPwdElement) {
+                            updatePasswords(currentClientSocket, userId, clientPwdElement, advisorPwdElement);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        resetClientView(currentClientSocket);
+                    });
+                });
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
+            
+        });
+    </script>
+</body>
+</html>

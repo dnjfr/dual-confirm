@@ -1,0 +1,82 @@
+{
+  "connexion": {
+    "message": "Login",
+    "description": "Login page title"
+  },
+  "user_identifier": {
+    "message": "User ID",
+    "description": "Login identifier"
+  },
+  "user_password": {
+    "message": "Password",
+    "description": "Password"
+  },
+  "login": {
+    "message": "Sign in",
+    "description": "Login button"
+  },
+  "incorrect_username_or_password": {
+    "message": "Incorrect username or password.",
+    "description": "Login error message"
+  },
+  "welcome": {
+    "message": "Welcome",
+    "description": "Welcome message"
+  },
+  "client_advisor": {
+    "message": "Your advisor",
+    "description": "Client's advisor"
+  },
+  "logout": {
+    "message": "Sign out",
+    "description": "Logout button"
+  },
+  "personnal_dashboard": {
+    "message": "Your personal space",
+    "description": "Personal space title"
+  },
+  "address": {
+    "message": "Address:",
+    "description": "Client's address"
+  },
+  "auth": {
+    "message": "Authentication:",
+    "description": "Authentication box title"
+  },
+  "password_client_to_advisor": {
+    "message": "Password to confirm to your advisor:",
+    "description": "Password to confirm to advisor"
+  },
+  "password_client_from_advisor": {
+    "message": "Password your advisor must confirm to you:",
+    "description": "Password the advisor must confirm to client"
+  },
+  "advisor_dashboard": {
+    "message": "Advisor Dashboard",
+    "description": "Advisor page title"
+  },
+  "client_info": {
+    "message": "Client information",
+    "description": "Client information"
+  },
+  "select_client": {
+    "message": "-- Select a client --",
+    "description": "Select a client"
+  },
+  "client_name_label": {
+    "message": "Client name: ",
+    "description": "Client name"
+  },
+  "password_advisor_to_client": {
+    "message": "Password to confirm to your client:",
+    "description": "Password the advisor must confirm to client"
+  },
+  "password_advisor_from_client": {
+    "message": "Password your client must confirm to you:",
+    "description": "Password the client must confirm to advisor"
+  },
+  "updating": {
+    "message": "Updating...",
+    "description": "Message during password update"
+  }
+}

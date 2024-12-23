@@ -1,0 +1,126 @@
+services:
+  redis-words:
+    image: redis:latest
+    container_name: redis-words
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.2
+    volumes:
+      - ./databases/redis/redis-words-data:/data
+      - ./databases/redis/redis-conf/redis-words-conf:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+  
+  redis-passwords:
+    image: redis:latest
+    container_name: redis-passwords
+    ports:
+      - "6389:6379"
+    env_file:
+      - .env
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.3
+    volumes:
+      - ./databases/redis/redis-passwords-data:/data
+      - ./databases/redis/redis-conf/redis-passwords-conf:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-users-sessions:
+    image: redis:latest
+    container_name: redis-users-sessions
+    ports:
+      - "6399:6379"
+    env_file:
+      - .env
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.4
+    volumes:
+      - ./databases/redis/redis-users-sessions-data:/data
+      - ./databases/redis/redis-conf/redis-users-sessions-conf:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  postgres-users:
+    image: postgres:16
+    container_name: postgres-users
+    ports:
+      - "5433:5432"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: $POSTGRES_DB_NAME_USERS
+      POSTGRES_USER: $POSTGRES_DB_USERS_USER
+      POSTGRES_PASSWORD: $POSTGRES_DB_USERS_PASSWORD
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.5
+
+  postgres-audit:
+    image: postgres:16
+    container_name: postgres-audit
+    ports:
+      - "5431:5432"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: $POSTGRES_DB_NAME_AUDIT
+      POSTGRES_USER: $POSTGRES_DB_AUDIT_USER
+      POSTGRES_PASSWORD: $POSTGRES_DB_AUDIT_PASSWORD
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.6
+  
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    depends_on:
+      - redis-words
+      - redis-passwords
+    ports:
+      - "5540:5540"
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.7
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: $PGADMIN_DEFAULT_EMAIL
+      PGADMIN_DEFAULT_PASSWORD: $PGADMIN_DEFAULT_PASSWORD
+    volumes:
+      - ./databases/postgres/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres-users
+      - postgres-audit
+    restart: always
+    networks:
+      global_network:
+        ipv4_address: 172.25.0.8
+
+networks:
+  global_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
