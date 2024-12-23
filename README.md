@@ -1,10 +1,10 @@
 
 
-# DualConfirm - Dynamic Password Authentication System
+# DualConfirm - Dynamic password authentication system
 
 A secure authentication system for financial institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
 
-## 🌎 Select Language;
+## 🌎 Select language;
 [![en](https://img.shields.io/badge/English-red.svg)](README.md)
 [![fr](https://img.shields.io/badge/French-fr-green.svg)](README.fr.md)
 
@@ -12,34 +12,34 @@ A secure authentication system for financial institutions that generates synchro
 Le but de ce projet est de remettre le conseiller et le client au coeur de l'authentification 
 
 
-## 🔑 Key Features
+## 🔑 Key features
 
-- **Dynamic Password Generation**
+- **Dynamic password generation**
   - Real-time generation of unique passwords for each client-advisor pair
   - Passwords change every 60 seconds while users are active
   - Uses French dictionary words (minimum 6 letters) for better memorability
   - Scalable system capable of handling thousands of simultaneous password pairs
 
-- **Dual Authentication Flow**
+- **Dual authentication flow**
   - Each client has their own unique password
   - Each advisor sees distinct passwords for each of their clients
   - Mutual verification process during phone calls
   - Real-time synchronization between client and advisor interfaces
 
-- **Security Architecture**
+- **Security architecture**
   - Separate Redis instances for common words, password pairs, and user sessions
   - Segregated PostgreSQL databases for user management and audit logging
   - Complete session management with automatic timeouts
   - HTTPS support with SSL/TLS encryption
   - JWT-based authentication
 
-- **Advanced Session Management**
+- **Advanced session management**
   - Automatic session timeout after 180 seconds of inactivity
   - Real-time connection status monitoring
   - Graceful disconnection handling
   - WebSocket-based real-time updates
 
-## Example Usage
+## Example usage
 ```
 Client: "Hello, this is Mr. Dupont."
 Advisor: "Hello Mr. Dupont, this is Mr. Albert from Crédit Mutuel. Could you confirm your client password shown on your interface?"
@@ -50,27 +50,27 @@ Advisor: "My password is 'tulipe'."
 
 ## 🏗️ Architecture
 
-### Redis Databases
-1. **Common Words Database (Instance 1)**
+### Redis databases
+1. **Common words database (Instance 1)**
    - Stores dictionary words for password generation
    - Key format: `word:wd_xxxxx`
 
-2. **Password Pairs Database (Instance 2)**
+2. **Password pairs database (Instance 2)**
    - Stores temporary generated passwords
    - Key formats:
      - Client: `password:user:<user_id>:advisor:<advisor_id>`
      - Advisor: `password:advisor:<advisor_id>:user:<user_id>`
 
-3. **User Sessions Database (Instance 3)**
+3. **User sessions database (Instance 3)**
    - Manages active sessions and connection states
    - Key formats:
      - Connection status: `connection_status:<role>:<id>`
      - Activity status: `active_status:<role>:<id>`
      - JWT tokens: `otp:<id>`
 
-### PostgreSQL Databases
+### PostgreSQL databases
 
-1. **Users Database**
+1. **Users database**
    - Tables:
      - `users`: Client information
      - `advisors`: Advisor information
@@ -78,12 +78,12 @@ Advisor: "My password is 'tulipe'."
      - `users_passwords`: Hashed client passwords
      - `advisors_passwords`: Hashed advisor passwords
 
-2. **Audit Database**
+2. **Audit database**
    - Tables:
      - `passwords_audit`: Password generation history
      - `session_audit`: Session tracking and security events
 
-## 🚀 Getting Started
+## 🚀 Getting started
 
 ### Prerequisites
 - Docker and Docker Compose
@@ -96,31 +96,31 @@ Advisor: "My password is 'tulipe'."
 <summary>Follow the guide ⬇️</summary>
 <br>
 
-1. Clone the repository
+**1.** Clone the repository
 ```bash
 git clone <repository-url>
 ```
 
-2. Create and activate virtual environment:
+**2.** Create and activate virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. Install dependencies:
+**3.** Install dependencies:
 ```bash
 pip install -r requirements.txt
 npm init
 ```
 
-4. Update `package.json`:
+**4.** Update `package.json`:
 ```json
 {
   "type": "module"
 }
 ```
 
-5. Create `.env` file with the following variables 
+**5.** Create `.env` file with the following variables 
 
 <details>
 <summary>List of environnements variables used ⬇️</summary>
@@ -175,31 +175,31 @@ npm init
 <br>
 
 
-6. Generate Redis ACL files
+**6.** Generate Redis ACL files
 ```bash
 python utils/generate_users_acl.py
 ```
 
-7. Start the Docker containers
+**7.** Start the Docker containers
 ```bash
 docker compose up -d
 ```
 
-8. Set up databases
+**8.** Set up databases
 <details>
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
-  8.1. Access pgAdmin at http://localhost:5050/
+  **8.1.** Access pgAdmin at http://localhost:5050/
 
-  8.2. Configure Users Database Server:
+  **8.2.** Configure Users Database Server:
   - Host: 172.25.0.5
   - Port: 5432
   - Database: DC_PG_USERS
   - Username: `<your_identifier_for_users_base>`
   - Password: `<your_password_for_users_base>`
 
-  8.3. Configure Audit Database Server:
+  **8.3.** Configure Audit Database Server:
   - Host: 172.25.0.6
   - Port: 5432
   - Database: DC_PG_AUDIT
@@ -211,23 +211,23 @@ docker compose up -d
   <summary>Redis Setup ⬇️</summary>
   <br>
 
-8.4. Access RedisInsight at http://localhost:5540/
+**8.4.** Access RedisInsight at http://localhost:5540/
 
-  8.5. Configure Common Words DB instance:
+  **8.5.** Configure Common Words DB instance:
   - Host: 172.25.0.2
   - Port: 6379
   - Database: DC_RD_Words
   - Username: `<your_identifier_for_common_words_base>`
   - Password: `<your_password_for_common_words_base>`
 
-  8.6. Configure Passwords DB instance:
+  **8.6.** Configure Passwords DB instance:
   - Host: 172.25.0.3
   - Port: 6389
   - Database: DC_RD_PASSWORDS
   - Username: `<your_identifier_for_generated_passwords_base>`
   - Password: `<your_password_for_generated_passwords_base>`
 
-  8.7. Configure Sessions DB instance:
+  **8.7.** Configure Sessions DB instance:
   - Host: 172.25.0.4
   - Port: 6399
   - Database: DC_RD_SESSIONS_USERS
@@ -237,17 +237,17 @@ docker compose up -d
 
 </details>
 
-   - Run database setup script:
+**9.** Run database setup script:
 ```bash
 python setup_db_creation_population.py
 ```
 
-9. Generate SSL certificates for HTTPS
+**10.** Generate SSL certificates for HTTPS
 ```bash
 python utils/setup_ssl.py
 ```
 
-10. Start the application
+**11.** Start the application
 ```bash
 # Terminal 1: Start password generation service
 python passwords_generation.py
@@ -257,7 +257,7 @@ python app.py
 ```
 </details>
 
-## 🔒 Security Considerations
+## 🔒 Security considerations
 
 - Passwords are automatically rotated every 60 seconds
 - All database instances are isolated and run on separate Docker containers
@@ -266,7 +266,7 @@ python app.py
 - SSL/TLS encryption for all communications
 - Complete audit logging of all authentication attempts and password generations
 
-## ⚠️ Security Notes - For development only
+## ⚠️ Security notes - For development only
 
 - Default test passwords:
     ```
