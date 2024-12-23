@@ -75,7 +75,7 @@ Advisor: "My password is 'diamond'."
 ### Global scheme
 
 <p align="center">
-<img width="350" src="/git-img/global-scheme.png"/>
+<img width="800" src="/git-img/global-scheme.png"/>
 </p>
 
 ### Redis databases
