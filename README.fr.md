@@ -225,7 +225,7 @@ docker compose up -d
 <summary>Configuration PostgreSQL ⬇️</summary>
 <br>
 
-**8.1.** Accédez à pgAdmin sur http://localhost:5050/
+**8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a>
 
 **8.2.** Configurez le serveur de base de données utilisateurs :
 - Hôte : 172.25.0.5
@@ -246,7 +246,7 @@ docker compose up -d
 <summary>Configuration Redis ⬇️</summary>
 <br>
 
-**8.4.** Accédez à RedisInsight sur http://localhost:5540/
+**8.4.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a>
 
 **8.5.** Configurez l'instance de base de données des mots courants :
 - Hôte : 172.25.0.2
@@ -257,21 +257,21 @@ docker compose up -d
 
 **8.6.** Configurez l'instance de base de données des mots de passe :
 - Hôte : 172.25.0.3
-- Port : 6389
+- Port : 6379
 - Base de données : DC_RD_PASSWORDS
 - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
 - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
 
 **8.7.** Configurez l'instance de base de données des sessions :
 - Hôte : 172.25.0.4
-- Port : 6399
+- Port : 6379
 - Base de données : DC_RD_SESSIONS_USERS
 - Nom d'utilisateur : `<votre_identifiant_pour_base_session_utilisateur>`
 - Mot de passe : `<votre_mot_de_passe_pour_base_session_utilisateur>`
 
 </details>
 
-**9.** Exécutez le script de configuration des bases de données :
+**9.** Exécutez le script de configuration des bases de données et prenez un ☕ :
 ```bash
 python setup_db_creation_population.py
 ```

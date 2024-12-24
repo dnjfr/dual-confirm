@@ -228,7 +228,7 @@ docker compose up -d
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
-  **8.1.** Access pgAdmin at http://localhost:5050/
+  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a>
 
   **8.2.** Configure users database server:
   - Host: 172.25.0.5
@@ -249,7 +249,7 @@ docker compose up -d
   <summary>Redis Setup ⬇️</summary>
   <br>
 
-**8.4.** Access RedisInsight at http://localhost:5540/
+**8.4.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a>
 
   **8.5.** Configure common words database instance:
   - Host: 172.25.0.2
@@ -260,14 +260,14 @@ docker compose up -d
 
   **8.6.** Configure passwords database instance:
   - Host: 172.25.0.3
-  - Port: 6389
+  - Port: 6379
   - Database: DC_RD_PASSWORDS
   - Username: `<your_identifier_for_generated_passwords_base>`
   - Password: `<your_password_for_generated_passwords_base>`
 
   **8.7.** Configure sessions database instance:
   - Host: 172.25.0.4
-  - Port: 6399
+  - Port: 6379
   - Database: DC_RD_SESSIONS_USERS
   - Username: `<your_identifier_for_session_user_base>`
   - Password: `<your_password_for_session_user_base>`
@@ -275,7 +275,7 @@ docker compose up -d
 
 </details>
 
-**9.** Run database setup script:
+**9.** Run database setup script and have a ☕:
 ```bash
 python setup_db_creation_population.py
 ```
