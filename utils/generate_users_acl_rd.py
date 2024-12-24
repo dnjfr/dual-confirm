@@ -46,3 +46,5 @@ def generate_users_acl():
 
         else:
             print(f"Missing configuration for instance '{instance}'.")
+
+generate_users_acl()
