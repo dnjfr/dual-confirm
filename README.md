@@ -137,13 +137,14 @@ Advisor: "My password is 'diamond'."
 
 **1.** Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/dnjfr/dual-confirm
+cd dual-confirm
 ```
 
 **2.** Create and activate virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv/Scripts/activate
 ```
 
 **3.** Install dependencies:
@@ -152,11 +153,9 @@ pip install -r requirements.txt
 npm init
 ```
 
-**4.** Update `package.json`:
+**4.** Update `package.json`, add the line:
 ```json
-{
   "type": "module"
-}
 ```
 
 **5.** Create `.env` file with the following variables:

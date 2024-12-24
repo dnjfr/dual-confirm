@@ -135,13 +135,14 @@ Conseiller : "Mon mot de passe est 'diamant'."
 
 **1.** Clonez le dépôt :
 ```bash
-git clone <url-du-dépôt>
+git clone https://github.com/dnjfr/dual-confirm
+cd dual-confirm
 ```
 
 **2.** Créez et activez l'environnement virtuel :
 ```bash
 python -m venv venv
-source venv/bin/activate  # Sur Windows : venv\Scripts\activate
+source venv/bin/activate  # Sur Windows : venv/Scripts/activate
 ```
 
 **3.** Installez les dépendances :
@@ -150,11 +151,9 @@ pip install -r requirements.txt
 npm init
 ```
 
-**4.** Mettez à jour `package.json` :
+**4.** Mettez à jour `package.json`, ajoutez la ligne :
 ```json
-{
   "type": "module"
-}
 ```
 
 **5.** Créez un fichier `.env` avec les variables suivantes :
