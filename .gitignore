@@ -8,6 +8,7 @@
 package*
 .idea
 .venv
+*venv*
 .vscode
 compare*
 **/mini-dumps
