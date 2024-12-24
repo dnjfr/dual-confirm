@@ -212,7 +212,6 @@ npm init
 
 <br>
 
-
 **6.** Generate Redis ACL files:
 ```bash
 python utils/generate_users_acl_rd.py
@@ -228,51 +227,59 @@ docker compose up -d
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
-  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a>
+  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> and create your email/password (to be reported in .env)
 
-  **8.2.** Configure users database server:
+  **8.2.** To configure a server, click on "Add new server"
+
+  **8.3.** Configure users database server:
+  - Server name: postgres-users
   - Host: 172.25.0.5
   - Port: 5432
-  - Database: DC_PG_USERS
   - Username: `<your_identifier_for_users_base>`
   - Password: `<your_password_for_users_base>`
 
-  **8.3.** Configure audit database server:
+  **8.4.** Configure audit database server:
+  - Server name: postgres-audit
   - Host: 172.25.0.6
   - Port: 5432
-  - Database: DC_PG_AUDIT
   - Username: `<your_identifier_for_audit_base>`
   - Password: `<your_password_for_audit_base>`
+
+  **8.5.** Create 3 databases in server postgres-users : 
+  - All users base : DC_PG_USERS_ADVISORS, 
+  - Users passwords base : DC_PG_USERS_PASSWORDS, 
+  - Avisors passwords base : DC_PG_ADVISORS_PASSWORDS
+
+  **8.6.** Create the database in server postgres-audit :  
+  - Passwords pair and sessions users audit base : DC_PG_AUDIT
 </details>
 
 <details>
   <summary>Redis Setup ⬇️</summary>
   <br>
 
-**8.4.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a>
+  **8.7.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> and click on "Add Redis database"
 
-  **8.5.** Configure common words database instance:
+  **8.8.** Configure common words database instance:
   - Host: 172.25.0.2
   - Port: 6379
-  - Database: DC_RD_WORDS
+  - Database Alias: DC_RD_WORDS
   - Username: `<your_identifier_for_common_words_base>`
   - Password: `<your_password_for_common_words_base>`
 
-  **8.6.** Configure passwords database instance:
+  **8.9.** Configure passwords database instance:
   - Host: 172.25.0.3
   - Port: 6379
-  - Database: DC_RD_PASSWORDS
+  - Database Alias: DC_RD_PASSWORDS
   - Username: `<your_identifier_for_generated_passwords_base>`
   - Password: `<your_password_for_generated_passwords_base>`
 
-  **8.7.** Configure sessions database instance:
+  **8.10.** Configure sessions database instance:
   - Host: 172.25.0.4
   - Port: 6379
-  - Database: DC_RD_SESSIONS_USERS
+  - Database Alias: DC_RD_SESSIONS_USERS
   - Username: `<your_identifier_for_session_user_base>`
   - Password: `<your_password_for_session_user_base>`
-
-
 </details>
 
 **9.** Run database setup script and have a ☕:

@@ -165,8 +165,8 @@ npm init
 ```
 GLOBAL_HOST_NETWORK=host.docker.internal
 
-PGADMIN_DEFAULT_EMAIL=pgadmin@pgadmin.com
-PGADMIN_DEFAULT_PASSWORD=pgadmin
+PGADMIN_DEFAULT_EMAIL=<votre_email_pour_pgadmin>
+PGADMIN_DEFAULT_PASSWORD=<votre_mot_de_passe_pour_pgadmin>
 
 POSTGRES_DB_NAME_USERS=DC_PG_USERS_ADVISORS
 POSTGRES_DB_USERS_PORT=5433
@@ -222,52 +222,63 @@ docker compose up -d
 
 **8.** Configurez les bases de données :
 <details>
-<summary>Configuration PostgreSQL ⬇️</summary>
-<br>
+  <summary>Configuration PostgreSQL ⬇️</summary>
+  <br>
 
-**8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a>
+  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> et créez votre email/mot_de_passe (à reporter dans .env)
 
-**8.2.** Configurez le serveur de base de données utilisateurs :
-- Hôte : 172.25.0.5
-- Port : 5432
-- Base de données : DC_PG_USERS
-- Nom d'utilisateur : `<votre_identifiant_pour_base_utilisateurs>`
-- Mot de passe : `<votre_mot_de_passe_pour_base_utilisateurs>`
+  **8.2.** Pour configurer un serveur, cliquez sur "Add new server"
 
-**8.3.** Configurez le serveur de base de données d'audit :
-- Hôte : 172.25.0.6
-- Port : 5432
-- Base de données : DC_PG_AUDIT
-- Nom d'utilisateur : `<votre_identifiant_pour_base_audit>`
-- Mot de passe : `<votre_mot_de_passe_pour_base_audit>`
+  **8.3.** Configurez le serveur de base de données utilisateurs :
+  - Nom du serveur : postgres-users
+  - Hôte : 172.25.0.5
+  - Port : 5432
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_utilisateurs>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_utilisateurs>`
+
+  **8.4.** Configurez le serveur de base de données d'audit :
+  - Nom du serveur : postgres-audit
+  - Hôte : 172.25.0.6
+  - Port : 5432
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_audit>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_audit>`
+
+  **8.5.** Créez 3 bases de données dans le serveur postgres-users :
+  - Base de tous les utilisateurs : DC_PG_USERS_ADVISORS,
+  - Base des mots de passe utilisateurs : DC_PG_USERS_PASSWORDS,
+  - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
+
+  **8.6.** Créez la base de données dans le serveur postgres-audit :
+  - Base d'audit des paires de mots de passe et des sessions utilisateurs : DC_PG_AUDIT
 </details>
 
 <details>
-<summary>Configuration Redis ⬇️</summary>
-<br>
+  <summary>Configuration Redis ⬇️</summary>
+  <br>
 
-**8.4.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a>
+  **8.7.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
 
-**8.5.** Configurez l'instance de base de données des mots courants :
-- Hôte : 172.25.0.2
-- Port : 6379
-- Base de données : DC_RD_WORDS
-- Nom d'utilisateur : `<votre_identifiant_pour_base_mots_courants>`
-- Mot de passe : `<votre_mot_de_passe_pour_base_mots_courants>`
 
-**8.6.** Configurez l'instance de base de données des mots de passe :
-- Hôte : 172.25.0.3
-- Port : 6379
-- Base de données : DC_RD_PASSWORDS
-- Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
-- Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
+  **8.8.** Configurez l'instance de base de données des mots courants :
+  - Hôte : 172.25.0.2
+  - Port : 6379
+  - Alias base de données : DC_RD_WORDS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_courants>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_courants>`
 
-**8.7.** Configurez l'instance de base de données des sessions :
-- Hôte : 172.25.0.4
-- Port : 6379
-- Base de données : DC_RD_SESSIONS_USERS
-- Nom d'utilisateur : `<votre_identifiant_pour_base_session_utilisateur>`
-- Mot de passe : `<votre_mot_de_passe_pour_base_session_utilisateur>`
+  **8.9.** Configurez l'instance de base de données des mots de passe :
+  - Hôte : 172.25.0.3
+  - Port : 6379
+  - Alias base de données : DC_RD_PASSWORDS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
+
+  **8.10.** Configurez l'instance de base de données des sessions :
+  - Hôte : 172.25.0.4
+  - Port : 6379
+  - Alias base de données : DC_RD_SESSIONS_USERS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_session_utilisateur>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_session_utilisateur>`
 
 </details>
 
