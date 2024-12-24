@@ -143,7 +143,7 @@ cd dual-confirm
 
 **2.** Create and activate virtual environment:
 ```bash
-python -m venv venv
+python -m venv venv 
 source venv/bin/activate  # On Windows: venv/Scripts/activate
 ```
 

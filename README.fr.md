@@ -217,7 +217,7 @@ python utils/generate_users_acl.py
 
 **7.** Démarrez les conteneurs Docker :
 ```bash
-docker compose up -d
+docker compose up -d 
 ```
 
 **8.** Configurez les bases de données :
