@@ -36,6 +36,6 @@ populate_passwords(advisors_passwords_csv_file, 'advisors_passwords', 'advisor_i
 
 # Redis common words database population
 
-commonwords_csv_file = f"samples-datas//{samples_language}/words.csv"
+commonwords_csv_file = f"samples-datas/{samples_language}/words.csv"
 
 populate_common_words_db(commonwords_csv_file)

@@ -215,7 +215,7 @@ npm init
 
 **6.** Generate Redis ACL files:
 ```bash
-python utils/generate_users_acl.py
+python utils/generate_users_acl_rd.py
 ```
 
 **7.** Start the Docker containers:

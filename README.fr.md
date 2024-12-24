@@ -212,7 +212,7 @@ SAMPLES_LANGUAGE=<en_ou_fr>
 
 **6.** Générez les fichiers ACL Redis :
 ```bash
-python utils/generate_users_acl.py
+python utils/generate_users_acl_rd.py
 ```
 
 **7.** Démarrez les conteneurs Docker :

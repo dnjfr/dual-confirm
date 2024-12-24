@@ -5,9 +5,9 @@ load_dotenv(override=True)
 
 # Set directory paths for each Redis instance
 paths = {
-    "redis-words": "../databases/redis/redis-conf/redis-words-conf/users.acl",
-    "redis-passwords": "../databases/redis/redis-conf/redis-passwords-conf/users.acl",
-    "redis-users-sessions": "../databases/redis/redis-conf/redis-users-sessions-conf/users.acl",
+    "redis-words": "databases/redis/redis-conf/redis-words-conf/users.acl",
+    "redis-passwords": "databases/redis/redis-conf/redis-passwords-conf/users.acl",
+    "redis-users-sessions": "databases/redis/redis-conf/redis-users-sessions-conf/users.acl",
 }
 
 # User configurations for each instance
@@ -46,5 +46,3 @@ def generate_users_acl():
 
         else:
             print(f"Missing configuration for instance '{instance}'.")
-            
-generate_users_acl()
