@@ -120,7 +120,7 @@ Advisor: "My password is 'diamond'."
 2. **Audit database**
    - Tables:
      - `passwords_audit`: Password generation history
-     - `session_audit`: Session tracking and security events
+     - `sessions_users_audit`: Session tracking and security events
 
 ## 🚀 Getting Started
 
@@ -143,8 +143,8 @@ cd dual-confirm
 
 **2.** Create and activate virtual environment:
 ```bash
-python -m venv venv 
-source venv/bin/activate  # On Windows: venv/Scripts/activate
+python -m venv .venv 
+source .venv/bin/activate  # On Windows: .venv/Scripts/activate
 ```
 
 **3.** Install dependencies:
@@ -188,7 +188,7 @@ npm init
     POSTGRES_DB_AUDIT_USER=<your_identifier_for_audit_base>
     POSTGRES_DB_AUDIT_PASSWORD=<your_password_for_audit_base>
     POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT=passwords_generation_audit
-    POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_AUDIT=session_audit
+    POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_USERS_AUDIT=sessions_users_audit
 
     REDIS_DB_WORDS_PORT=6379
     REDIS_DB_WORDS_USER=<your_password_for_common_words_base>

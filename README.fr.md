@@ -118,7 +118,7 @@ Conseiller : "Mon mot de passe est 'diamant'."
 2. **Base de données d'audit**
    - Tables :
      - `passwords_audit` : Historique de génération des mots de passe
-     - `session_audit` : Suivi des sessions et événements de sécurité
+     - `sessions_users_audit` : Suivi des sessions et événements de sécurité
 
 ## 🚀 Pour commencer
 
@@ -141,8 +141,8 @@ cd dual-confirm
 
 **2.** Créez et activez l'environnement virtuel :
 ```bash
-python -m venv venv
-source venv/bin/activate  # Sur Windows : venv/Scripts/activate
+python -m venv .venv
+source .venv/bin/activate  # Sur Windows : .venv/Scripts/activate
 ```
 
 **3.** Installez les dépendances :
@@ -186,7 +186,7 @@ POSTGRES_DB_AUDIT_PORT=5431
 POSTGRES_DB_AUDIT_USER=<votre_identifiant_pour_base_audit>
 POSTGRES_DB_AUDIT_PASSWORD=<votre_mot_de_passe_pour_base_audit>
 POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT=passwords_generation_audit
-POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_AUDIT=session_audit
+POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_USERS_AUDIT=sessions_users_audit
 
 REDIS_DB_WORDS_PORT=6379
 REDIS_DB_WORDS_USER=<votre_identifiant_pour_base_mots_courants>
