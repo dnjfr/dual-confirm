@@ -22,9 +22,6 @@ from src.request_upadate.request_update import handle_request_update
 
 if __name__ == '__main__':
     
-    # Without SSL
-    # socketio.run(app, debug=False)
-    
     # With SSL
     cert_dir = os.path.join(os.path.dirname(__file__), 'ssl_certificates')
     context = (
@@ -33,3 +30,6 @@ if __name__ == '__main__':
     )
     
     socketio.run(app, host='0.0.0.0', port=443, ssl_context=context, debug=False)
+    
+    # Without SSL
+    # socketio.run(app, debug=False)
