@@ -10,7 +10,6 @@
 <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" />
 <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
 <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
-<img src="https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
 <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
 <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
 <img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white" />
@@ -297,9 +296,9 @@ If your operating system is Windows and OpenSSL is not installed on your machine
 python utils/setup_ssl.py
 ```
 
-Then modify the app.py file depending on whether or not SSL is used.
+Then modify the `app.py` file depending on whether or not SSL is used.
 
-**11.** Start the application:
+**11.** Open two terminals (make sure both terminals have the `.venv` activated) and start the application:
 ```bash
 # Terminal 1: Start password generation service
 python passwords_generation.py
