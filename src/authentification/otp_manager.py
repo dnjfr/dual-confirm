@@ -121,9 +121,6 @@ class OTPManager:
         # Generation Audit
         self._audit_otp_generation(user_id, advisor_id)
         
-        # Disconnection audit
-        self._audit_logout(user_id, advisor_id)
-        
         return jwt_token
     
     # Decode a token
