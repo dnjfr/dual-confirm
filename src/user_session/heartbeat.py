@@ -1,14 +1,11 @@
-from flask import session
 from extensions import app, socketio
+from src.user_session.common import get_identifier_and_role
 from src.db_management.db_configurations import redis_set, redis_users_sessions
 
 # Listening for socket messages to mark the active user
 @socketio.on('heartbeat')
 def handle_heartbeat(data):
-    user_id = data.get('user_id')
-    advisor_id = data.get('advisor_id')
-    role = session.get('role')
-    identifier = user_id if role == 'client' else advisor_id
+    identifier, role = get_identifier_and_role(data)
 
     if identifier and role:
         active_key = f"active_status:{role}:{identifier}"

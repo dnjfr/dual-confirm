@@ -1,6 +1,7 @@
 import bcrypt
 import random
 import psycopg2
+from typing import cast
 from datetime import datetime
 from src.db_management.db_configurations import get_audit_db_connection, passwords_generation_audit_tablename, redis_words, redis_passwords, redis_users_sessions, redis_set, redis_get 
 
@@ -32,7 +33,7 @@ def is_selected(advisor_id, user_id):
     # If user_id is "Empty", delete all existing selection keys
     if user_id == "Empty":
         pattern = f"selection_status:*:*"
-        existing_selection_keys = redis_users_sessions.keys(pattern)
+        existing_selection_keys = list(redis_users_sessions.scan_iter(pattern))
         for key in existing_selection_keys:
             redis_users_sessions.delete(key)
         return False
@@ -133,8 +134,8 @@ def get_password_and_timer(user_id, advisor_id):
     user_pwd = redis_get(redis_passwords, user_key)
     advisor_pwd = redis_get(redis_passwords, advisor_key)
     
-    user_ttl = int(redis_passwords.ttl(user_key) or 0)
-    advisor_ttl = int(redis_passwords.ttl(advisor_key) or 0)
+    user_ttl = cast(int, redis_passwords.ttl(user_key))
+    advisor_ttl = cast(int, redis_passwords.ttl(advisor_key))
     
     # If passwords have expired or do not exist, return None
     if user_ttl <= 0 or advisor_ttl <= 0 or not user_pwd or not advisor_pwd:
@@ -156,7 +157,7 @@ def get_password_and_timer(user_id, advisor_id):
 # Retrieve a word from Redis function
 def get_random_word():
     # Retrieves keys synchronously
-    keys = list(redis_words.keys("word:*"))
+    keys = cast(list, (redis_words.keys("word:*")))
     
     if not keys:
         return None
@@ -183,8 +184,10 @@ def hash_password(password):
 # Audit passwords in PostgreSQL function
 def audit_passwords(user_id, hashed_user_pwd, advisor_id, hashed_advisor_pwd):
     try:
+        
         audit_db_connection = get_audit_db_connection()
         audit_db_cursor = audit_db_connection.cursor()
+        
         query = f"""
             INSERT INTO {passwords_generation_audit_tablename} (user_id, user_pwd, advisor_id, advisor_pwd, timestamp)
             VALUES (%s, %s, %s, %s, %s);

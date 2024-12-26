@@ -17,7 +17,7 @@ def client_auth():
     
     # Remove the selection status for all previously selected customers
     pattern = f"selection_status:{advisor_id}:*"
-    existing_selection_keys = redis_users_sessions.keys(pattern)
+    existing_selection_keys = list(redis_users_sessions.scan_iter(pattern))
     for key in existing_selection_keys:
         if key.decode('utf-8').split(':')[-1] != user_id:
             redis_users_sessions.delete(key)

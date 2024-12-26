@@ -1,6 +1,6 @@
 from functools import wraps
 import bcrypt
-from flask import abort, redirect, render_template, request, session, url_for
+from flask import abort, redirect, render_template, url_for, request, session
 from extensions import app, socketio, otp_manager
 from src.db_management.db_configurations import users_db_cursor, users_advisors_tablename,  users_passwords_db_cursor, users_passwords_tablename, advisors_passwords_db_cursor ,advisors_passwords_tablename, redis_users_sessions, redis_set, redis_get
 from src.user_session.validate_socketio_session import validate_socketio_session

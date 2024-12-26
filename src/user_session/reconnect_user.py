@@ -1,6 +1,7 @@
 from flask import session
 from extensions import app, socketio
 from src.db_management.db_configurations import redis_get, redis_set, redis_users_sessions
+from src.user_session.common import get_identifier_and_role
 from passwords_generation import generate_password_on_demand, get_password_and_timer
 
 
@@ -8,10 +9,7 @@ from passwords_generation import generate_password_on_demand, get_password_and_t
 # Listening for socket messages to mark user reconnected
 @socketio.on('reconnect_user')
 def handle_reconnect_user(data):
-    user_id = data.get('user_id')
-    advisor_id = data.get('advisor_id')
-    role = session.get('role')
-    identifier = user_id if role == 'client' else advisor_id
+    identifier, role = get_identifier_and_role(data)
     
     if identifier and role:
         active_key = f"active_status:{role}:{identifier}"
@@ -27,7 +25,9 @@ def handle_reconnect_user(data):
             
             # Regenerate passwords only if necessary
             if role == 'client':
+                user_id = session.get('user_id')
                 advisor_id = session.get('advisor_id')
+                
                 # First check if passwords really need to be regenerated
                 current_passwords = get_password_and_timer(user_id, advisor_id)
                 if not current_passwords['user_pwd'] or current_passwords['user_ttl'] <= 0:
