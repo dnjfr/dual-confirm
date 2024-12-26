@@ -5,7 +5,7 @@
 **/noauth
 **/redis-conf/redis-*/*.acl
 **/redis-*-data/*
-package*
+package-lock*
 .idea
 .venv
 *venv*

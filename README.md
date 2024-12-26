@@ -127,7 +127,6 @@ Advisor: "My password is 'diamond'."
 ### Prerequisites
 - Docker and Docker Compose
 - Python 3.11+
-- Node.js and npm
 - OpenSSL (optional, for local HTTPS setup)
 
 ### Installation
@@ -150,7 +149,6 @@ source .venv/bin/activate  # On Windows: .venv/Scripts/activate
 **3.** Install dependencies:
 ```bash
 pip install -r requirements.txt
-npm init
 ```
 
 **4.** Update `package.json`, add the line:
@@ -287,10 +285,19 @@ docker compose up -d
 python setup_db_creation_population.py
 ```
 
-**10.** Generate SSL certificates for HTTPS:
+**10.** Generate SSL certificates for HTTPS (optional):
+
+<details>
+<summary>Windows users ⬇️</summary>
+<br>
+If your operating system is Windows and OpenSSL is not installed on your machine, the simplest solution is to download and install the version compatible with your system via FireDaemon: https://kb.firedaemon.com/support/solutions/articles/4000121705
+</details>
+
 ```bash
 python utils/setup_ssl.py
 ```
+
+Then modify the app.py file depending on whether or not SSL is used.
 
 **11.** Start the application:
 ```bash
