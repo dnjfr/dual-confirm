@@ -122,7 +122,7 @@ class OTPManager:
         self._audit_otp_generation(user_id, advisor_id)
         
         return jwt_token
-    
+
     # Decode a token
     def _decode_token(self, token):
         """

@@ -219,7 +219,7 @@ docker compose up -d
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
-  **7.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD variables created in `.env`)
+  **7.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD variables created in `.env`) 
 
   **7.2.** To configure a server, click on "Add new server"
 
