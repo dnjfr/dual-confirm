@@ -117,7 +117,7 @@ Conseiller : "Mon mot de passe est 'diamant'."
 2. **Base de données d'audit**
    - Tables :
      - `passwords_audit` : Historique de génération des mots de passe
-     - `sessions_users_audit` : Suivi des sessions et événements de sécurité
+     - `users_sessions_audit` : Suivi des sessions et événements de sécurité
 
 ## 🚀 Pour commencer
 
@@ -183,7 +183,7 @@ POSTGRES_DB_AUDIT_PORT=5431
 POSTGRES_DB_AUDIT_USER=<votre_identifiant_pour_base_audit>
 POSTGRES_DB_AUDIT_PASSWORD=<votre_mot_de_passe_pour_base_audit>
 POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT=passwords_generation_audit
-POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_USERS_AUDIT=sessions_users_audit
+POSTGRES_DB_AUDIT_TABLENAME_USERS_SESSIONS_AUDIT=users_sessions_audit
 
 REDIS_DB_WORDS_PORT=6379
 REDIS_DB_WORDS_USER=<votre_identifiant_pour_base_mots_courants>
@@ -222,7 +222,7 @@ docker compose up -d
   <summary>Configuration PostgreSQL ⬇️</summary>
   <br>
 
-  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> et entrez votre email/mot_de_passe (ce sont les PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créés .env)
+  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créés .env)
 
   **8.2.** Pour configurer un serveur, cliquez sur "Add new server"
 
@@ -273,7 +273,7 @@ docker compose up -d
   **8.10.** Configurez l'instance de base de données des sessions :
   - Hôte : 172.25.0.4
   - Port : 6379
-  - Alias base de données : DC_RD_SESSIONS_USERS
+  - Alias base de données : DC_RD_USERS_SESSIONS
   - Nom d'utilisateur : `<votre_identifiant_pour_base_session_utilisateur>`
   - Mot de passe : `<votre_mot_de_passe_pour_base_session_utilisateur>`
 

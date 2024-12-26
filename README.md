@@ -99,7 +99,7 @@ Advisor: "My password is 'diamond'."
      - Client: `password:user:<user_id>:advisor:<advisor_id>`
      - Advisor: `password:advisor:<advisor_id>:user:<user_id>`
 
-3. **User sessions database (Instance 3)**
+3. **Users sessions database (Instance 3)**
    - Manages active sessions and connection states
    - Key formats:
      - Connection status: `connection_status:<role>:<id>`
@@ -119,7 +119,7 @@ Advisor: "My password is 'diamond'."
 2. **Audit database**
    - Tables:
      - `passwords_audit`: Password generation history
-     - `sessions_users_audit`: Session tracking and security events
+     - `users_sessions_audit`: Session tracking and security events
 
 ## 🚀 Getting Started
 
@@ -164,8 +164,8 @@ pip install -r requirements.txt
   ```
     GLOBAL_HOST_NETWORK=host.docker.internal
 
-    PGADMIN_DEFAULT_EMAIL=pgadmin@pgadmin.com
-    PGADMIN_DEFAULT_PASSWORD=pgadmin
+    PGADMIN_DEFAULT_EMAIL=<your_email_for_pgadmin>
+    PGADMIN_DEFAULT_PASSWORD=<your_password_for_pgadmin>
 
     POSTGRES_DB_NAME_USERS=DC_PG_USERS_ADVISORS
     POSTGRES_DB_USERS_PORT=5433
@@ -185,7 +185,7 @@ pip install -r requirements.txt
     POSTGRES_DB_AUDIT_USER=<your_identifier_for_audit_base>
     POSTGRES_DB_AUDIT_PASSWORD=<your_password_for_audit_base>
     POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT=passwords_generation_audit
-    POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_USERS_AUDIT=sessions_users_audit
+    POSTGRES_DB_AUDIT_TABLENAME_USERS_SESSIONS_AUDIT=users_sessions_audit
 
     REDIS_DB_WORDS_PORT=6379
     REDIS_DB_WORDS_USER=<your_password_for_common_words_base>
@@ -196,8 +196,8 @@ pip install -r requirements.txt
     REDIS_DB_PASSWORDS_PASSWORD=<your_password_for_generated_passwords_base>
 
     REDIS_DB_USERS_SESSIONS_PORT=6399
-    REDIS_DB_USERS_SESSIONS_USER=<your_identifier_for_session_user_base>
-    REDIS_DB_USERS_SESSIONS_PASSWORD=<your_password_for_session_user_base>
+    REDIS_DB_USERS_SESSIONS_USER=<your_identifier_for_users_sessions_base>
+    REDIS_DB_USERS_SESSIONS_PASSWORD=<your_password_for_users_sessions_base>
 
     FLASK_SECRET=<your_Flask_secret_key>
     JWT_SECRET=<your_JWT_secret_key>
@@ -224,7 +224,7 @@ docker compose up -d
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
-  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD created in .env)
+  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD created in .env)
 
   **8.2.** To configure a server, click on "Add new server"
 
@@ -248,7 +248,7 @@ docker compose up -d
   - Avisors passwords base : DC_PG_ADVISORS_PASSWORDS
 
   **8.6.** Create the database in server postgres-audit :  
-  - Passwords pair and sessions users audit base : DC_PG_AUDIT
+  - Passwords pair and users sessions audit base : DC_PG_AUDIT
 </details>
 
 <details>
@@ -274,9 +274,9 @@ docker compose up -d
   **8.10.** Configure sessions database instance:
   - Host: 172.25.0.4
   - Port: 6379
-  - Database Alias: DC_RD_SESSIONS_USERS
-  - Username: `<your_identifier_for_session_user_base>`
-  - Password: `<your_password_for_session_user_base>`
+  - Database Alias: DC_RD_USERS_SESSIONS
+  - Username: `<your_identifier_for_users_sessions_base>`
+  - Password: `<your_password_for_users_sessions_base>`
 </details>
 
 **9.** Run database setup script (the process can take a while, have a ☕):

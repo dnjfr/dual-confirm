@@ -202,5 +202,5 @@ def get_audit_db_connection():
 
 audit_db_connection = get_audit_db_connection()
 audit_db_cursor = audit_db_connection.cursor()
-sessions_users_audit_tablename = os.getenv("POSTGRES_DB_AUDIT_TABLENAME_SESSIONS_USERS_AUDIT")
+users_sessions_audit_tablename = os.getenv("POSTGRES_DB_AUDIT_TABLENAME_USERS_SESSIONS_AUDIT")
 passwords_generation_audit_tablename = os.getenv("POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT")
