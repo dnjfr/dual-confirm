@@ -150,12 +150,7 @@ source .venv/bin/activate  # On Windows: .venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
-**4.** Update `package.json`, add the line:
-```json
-  "type": "module"
-```
-
-**5.** Create `.env` file with the following variables:
+**4.** Create `.env` file with the following variables:
 
 <details>
 <summary>List of environnements variables used ⬇️</summary>
@@ -209,45 +204,45 @@ pip install -r requirements.txt
 
 <br>
 
-**6.** Generate Redis ACL files:
+**5.** Generate Redis ACL files:
 ```bash
 python utils/generate_users_acl_rd.py
 ```
 
-**7.** Start the Docker containers:
+**6.** Start the Docker containers:
 ```bash
 docker compose up -d
 ```
 
-**8.** Set up databases:
+**7.** Set up databases:
 <details>
   <summary>PostgreSQL Setup ⬇️</summary>
   <br>
 
-  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD created in .env)
+  **7.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD created in .env)
 
-  **8.2.** To configure a server, click on "Add new server"
+  **7.2.** To configure a server, click on "Add new server"
 
-  **8.3.** Configure users database server:
+  **7.3.** Configure users database server:
   - Server name: postgres-users
   - Host: 172.25.0.5
   - Port: 5432
   - Username: `<your_identifier_for_users_base>`
   - Password: `<your_password_for_users_base>`
 
-  **8.4.** Configure audit database server:
+  **7.4.** Configure audit database server:
   - Server name: postgres-audit
   - Host: 172.25.0.6
   - Port: 5432
   - Username: `<your_identifier_for_audit_base>`
   - Password: `<your_password_for_audit_base>`
 
-  **8.5.** Create 3 databases in server postgres-users : 
+  **7.5.** Create 3 databases in server postgres-users : 
   - All users base : DC_PG_USERS_ADVISORS
   - Users passwords base : DC_PG_USERS_PASSWORDS
   - Avisors passwords base : DC_PG_ADVISORS_PASSWORDS
 
-  **8.6.** Create the database in server postgres-audit :  
+  **7.6.** Create the database in server postgres-audit :  
   - Passwords pair and users sessions audit base : DC_PG_AUDIT
 </details>
 
@@ -255,23 +250,23 @@ docker compose up -d
   <summary>Redis Setup ⬇️</summary>
   <br>
 
-  **8.7.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> and click on "Add Redis database"
+  **7.7.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> and click on "Add Redis database"
 
-  **8.8.** Configure common words database instance:
+  **7.8.** Configure common words database instance:
   - Host: 172.25.0.2
   - Port: 6379
   - Database Alias: DC_RD_WORDS
   - Username: `<your_identifier_for_common_words_base>`
   - Password: `<your_password_for_common_words_base>`
 
-  **8.9.** Configure passwords database instance:
+  **7.9.** Configure passwords database instance:
   - Host: 172.25.0.3
   - Port: 6379
   - Database Alias: DC_RD_PASSWORDS
   - Username: `<your_identifier_for_generated_passwords_base>`
   - Password: `<your_password_for_generated_passwords_base>`
 
-  **8.10.** Configure sessions database instance:
+  **7.10.** Configure sessions database instance:
   - Host: 172.25.0.4
   - Port: 6379
   - Database Alias: DC_RD_USERS_SESSIONS
@@ -279,12 +274,12 @@ docker compose up -d
   - Password: `<your_password_for_users_sessions_base>`
 </details>
 
-**9.** Run database setup script (the process can take a while, have a ☕):
+**8.** Run database setup script (the process can take a while, have a ☕):
 ```bash
 python setup_db_creation_population.py
 ```
 
-**10.** Generate SSL certificates for HTTPS (optional):
+**9.** Generate SSL certificates for HTTPS (optional):
 
 <details>
 <summary>Windows users ⬇️</summary>
@@ -296,9 +291,9 @@ If your operating system is Windows and OpenSSL is not installed on your machine
 python utils/setup_ssl.py
 ```
 
-Then modify the `app.py` file depending on whether or not SSL is used.
+Then modify `app.py` file depending on whether or not SSL is used.
 
-**11.** Open two terminals (make sure both terminals have the `.venv` activated) and start the application:
+**10.** Open two terminals (make sure both terminals have `.venv` activated) and start the application:
 ```bash
 # Terminal 1: Start password generation service
 python passwords_generation.py

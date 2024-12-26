@@ -148,12 +148,7 @@ source .venv/bin/activate  # Sur Windows : .venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
-**4.** Mettez à jour `package.json`, ajoutez la ligne :
-```json
-  "type": "module"
-```
-
-**5.** Créez un fichier `.env` avec les variables suivantes :
+**4.** Créez un fichier `.env` avec les variables suivantes :
 
 <details>
 <summary>Liste des variables d'environnement utilisées ⬇️</summary>
@@ -207,45 +202,45 @@ SAMPLES_LANGUAGE=<en_ou_fr>
 
 <br>
 
-**6.** Générez les fichiers ACL Redis :
+**5.** Générez les fichiers ACL Redis :
 ```bash
 python utils/generate_users_acl_rd.py
 ```
 
-**7.** Démarrez les conteneurs Docker :
+**6.** Démarrez les conteneurs Docker :
 ```bash
 docker compose up -d 
 ```
 
-**8.** Configurez les bases de données :
+**7.** Configurez les bases de données :
 <details>
   <summary>Configuration PostgreSQL ⬇️</summary>
   <br>
 
-  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créés .env)
+  **7.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créés .env)
 
-  **8.2.** Pour configurer un serveur, cliquez sur "Add new server"
+  **7.2.** Pour configurer un serveur, cliquez sur "Add new server"
 
-  **8.3.** Configurez le serveur de base de données utilisateurs :
+  **7.3.** Configurez le serveur de base de données utilisateurs :
   - Nom du serveur : postgres-users
   - Hôte : 172.25.0.5
   - Port : 5432
   - Nom d'utilisateur : `<votre_identifiant_pour_base_utilisateurs>`
   - Mot de passe : `<votre_mot_de_passe_pour_base_utilisateurs>`
 
-  **8.4.** Configurez le serveur de base de données d'audit :
+  **7.4.** Configurez le serveur de base de données d'audit :
   - Nom du serveur : postgres-audit
   - Hôte : 172.25.0.6
   - Port : 5432
   - Nom d'utilisateur : `<votre_identifiant_pour_base_audit>`
   - Mot de passe : `<votre_mot_de_passe_pour_base_audit>`
 
-  **8.5.** Créez 3 bases de données dans le serveur postgres-users :
+  **7.5.** Créez 3 bases de données dans le serveur postgres-users :
   - Base de tous les utilisateurs : DC_PG_USERS_ADVISORS
   - Base des mots de passe utilisateurs : DC_PG_USERS_PASSWORDS
   - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
 
-  **8.6.** Créez la base de données dans le serveur postgres-audit :
+  **7.6.** Créez la base de données dans le serveur postgres-audit :
   - Base d'audit des paires de mots de passe et des sessions utilisateurs : DC_PG_AUDIT
 </details>
 
@@ -253,24 +248,24 @@ docker compose up -d
   <summary>Configuration Redis ⬇️</summary>
   <br>
 
-  **8.7.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
+  **7.7.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
 
 
-  **8.8.** Configurez l'instance de base de données des mots courants :
+  **7.8.** Configurez l'instance de base de données des mots courants :
   - Hôte : 172.25.0.2
   - Port : 6379
   - Alias base de données : DC_RD_WORDS
   - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_courants>`
   - Mot de passe : `<votre_mot_de_passe_pour_base_mots_courants>`
 
-  **8.9.** Configurez l'instance de base de données des mots de passe :
+  **7.9.** Configurez l'instance de base de données des mots de passe :
   - Hôte : 172.25.0.3
   - Port : 6379
   - Alias base de données : DC_RD_PASSWORDS
   - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
   - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
 
-  **8.10.** Configurez l'instance de base de données des sessions :
+  **7.10.** Configurez l'instance de base de données des sessions :
   - Hôte : 172.25.0.4
   - Port : 6379
   - Alias base de données : DC_RD_USERS_SESSIONS
@@ -279,12 +274,12 @@ docker compose up -d
 
 </details>
 
-**9.** Exécutez le script de configuration des bases de données (le process peut être long, prenez un ☕) :
+**8.** Exécutez le script de configuration des bases de données (le process peut être long, prenez un ☕) :
 ```bash
 python setup_db_creation_population.py
 ```
 
-**10.** Générez les certificats SSL pour HTTPS (optionnel) :
+**9.** Générez les certificats SSL pour HTTPS (optionnel) :
 
 <details>
 <summary>Utilisateurs Windows ⬇️</summary>
@@ -298,7 +293,7 @@ python utils/setup_ssl.py
 
 Modifiez ensuite le fichier `app.py` en fonction de l'utilisation ou non de SSL.
 
-**11.** Ouvrez deux terminaux (vérifiez bien que les deux terminaux ont `.venv` activés) et démarrez l'application :
+**10.** Ouvrez deux terminaux (vérifiez bien que les deux terminaux ont `.venv` activés) et démarrez l'application :
 ```bash
 # Terminal 1 : Démarrez le service de génération de mots de passe
 python passwords_generation.py
