@@ -225,7 +225,7 @@ docker compose up -d
   <summary>Configuration PostgreSQL ⬇️</summary>
   <br>
 
-  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> et créez votre email/mot_de_passe (à reporter dans .env)
+  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> et entrez votre email/mot_de_passe (ce sont les PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créés .env)
 
   **8.2.** Pour configurer un serveur, cliquez sur "Add new server"
 
@@ -244,8 +244,8 @@ docker compose up -d
   - Mot de passe : `<votre_mot_de_passe_pour_base_audit>`
 
   **8.5.** Créez 3 bases de données dans le serveur postgres-users :
-  - Base de tous les utilisateurs : DC_PG_USERS_ADVISORS,
-  - Base des mots de passe utilisateurs : DC_PG_USERS_PASSWORDS,
+  - Base de tous les utilisateurs : DC_PG_USERS_ADVISORS
+  - Base des mots de passe utilisateurs : DC_PG_USERS_PASSWORDS
   - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
 
   **8.6.** Créez la base de données dans le serveur postgres-audit :
@@ -282,7 +282,7 @@ docker compose up -d
 
 </details>
 
-**9.** Exécutez le script de configuration des bases de données et prenez un ☕ :
+**9.** Exécutez le script de configuration des bases de données (le process peut être long, prenez un ☕) :
 ```bash
 python setup_db_creation_population.py
 ```

@@ -23,7 +23,7 @@ def handle_reconnect_user(data):
             # Reset the status to "active"
             redis_set(redis_users_sessions, active_key, "active")
             
-            app.logger.info(f"{identifier} reconnecté. Statut réinitialisé à actif.")
+            app.logger.info(f"{identifier} reconnected. Status reset to active.")
             
             # Regenerate passwords only if necessary
             if role == 'client':

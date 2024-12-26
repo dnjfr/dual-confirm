@@ -5,7 +5,7 @@ import secrets
 import threading
 import logging
 from flask import request
-from src.db_management.db_configurations import session_audit_tablename, users_advisors_tablename
+from src.db_management.db_configurations import sessions_users_audit_tablename, users_advisors_tablename
 
 
 # OTP and JWT token manager
@@ -245,7 +245,7 @@ class OTPManager:
             role = 'advisor' if not user_id else 'client'
             with self.audit_db_connection.cursor() as cursor:
                 cursor.execute(f"""
-                    INSERT INTO {session_audit_tablename} (
+                    INSERT INTO {sessions_users_audit_tablename} (
                         user_id, 
                         advisor_id, 
                         role, 
@@ -276,7 +276,7 @@ class OTPManager:
                 # Retrieve the last login record for this user
                 cursor.execute(f"""
                     SELECT login_timestamp 
-                    FROM {session_audit_tablename} 
+                    FROM {sessions_users_audit_tablename} 
                     WHERE (user_id = %s OR advisor_id = %s) 
                     ORDER BY login_timestamp DESC 
                     LIMIT 1
@@ -291,7 +291,7 @@ class OTPManager:
                     
                     # Update session record with logout and duration
                     cursor.execute(f"""
-                        UPDATE {session_audit_tablename} 
+                        UPDATE {sessions_users_audit_tablename} 
                         SET logout_timestamp = %s, 
                             session_duration = %s 
                         WHERE login_timestamp = %s 
