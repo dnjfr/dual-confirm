@@ -8,7 +8,7 @@ from src.user_session.auto_disconnect_user import auto_disconnect_user
 # Listening for socket messages to mark user inactive
 @socketio.on('disconnect_user')
 def handle_disconnect_user(data):
-    identifier, role = get_identifier_and_role(data)
+    identifier, role, user_id, advisor_id = get_identifier_and_role(data)
     
     if identifier and role:
         active_key = f"active_status:{role}:{identifier}"
@@ -19,8 +19,8 @@ def handle_disconnect_user(data):
         # Start a thread for automatic disconnection
         socketio.start_background_task(
             auto_disconnect_user,
-            data.get('user_id'), 
-            data.get('advisor_id'), 
+            user_id, 
+            advisor_id, 
             role
         )
         

@@ -9,7 +9,7 @@ from passwords_generation import generate_password_on_demand, get_password_and_t
 # Listening for socket messages to mark user reconnected
 @socketio.on('reconnect_user')
 def handle_reconnect_user(data):
-    identifier, role = get_identifier_and_role(data)
+    identifier, role, user_id, advisor_id = get_identifier_and_role(data)
     
     if identifier and role:
         active_key = f"active_status:{role}:{identifier}"
@@ -25,8 +25,6 @@ def handle_reconnect_user(data):
             
             # Regenerate passwords only if necessary
             if role == 'client':
-                user_id = session.get('user_id')
-                advisor_id = session.get('advisor_id')
                 
                 # First check if passwords really need to be regenerated
                 current_passwords = get_password_and_timer(user_id, advisor_id)

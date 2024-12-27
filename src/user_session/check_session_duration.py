@@ -14,7 +14,7 @@ def handle_check_session_duration(data):
     This function is called periodically from the frontend.
     """
     try:
-        identifier, role = get_identifier_and_role(data)
+        identifier, role, user_id, advisor_id = get_identifier_and_role(data)
 
         if identifier and role:
             connection_key = f"connection_status:{role}:{identifier}"
@@ -29,8 +29,8 @@ def handle_check_session_duration(data):
                 print("Session expired or about to expire")
                 socketio.start_background_task(
                     auto_disconnect_user, 
-                    data.get('user_id'), 
-                    data.get('advisor_id'), 
+                    user_id, 
+                    advisor_id, 
                     role
                 )
     except Exception as e:

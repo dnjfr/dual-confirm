@@ -2,6 +2,7 @@
 import os
 from extensions import app, socketio
 
+from src.user_session.connect_listener import handle_connect
 from src.user_session.validate_socketio_session import validate_socketio_session
 from src.user_session.heartbeat import handle_heartbeat
 from src.user_session.check_session_duration import handle_check_session_duration

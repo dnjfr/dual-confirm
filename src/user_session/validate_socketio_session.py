@@ -3,7 +3,7 @@ from flask import session
 
 
 # Session validation for Socket.IO function
-def validate_socketio_session(session_id):
+def validate_socketio_session():
     """
     Validates the Socket.IO session by checking the session information.
     """

@@ -15,9 +15,8 @@ session_duration = 900
 @socketio.on('connect')
 def handle_connect():
     # Check the session before allowing the connection
-    if not validate_socketio_session(request.sid):
+    if not validate_socketio_session():
         return False  # Rejects the connection
-
 
 # Login decorator
 def login_required(role=None):

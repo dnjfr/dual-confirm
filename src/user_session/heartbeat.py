@@ -5,7 +5,7 @@ from src.db_management.db_configurations import redis_set, redis_users_sessions
 # Listening for socket messages to mark the active user
 @socketio.on('heartbeat')
 def handle_heartbeat(data):
-    identifier, role = get_identifier_and_role(data)
+    identifier, role, _, _ = get_identifier_and_role(data)
 
     if identifier and role:
         active_key = f"active_status:{role}:{identifier}"
