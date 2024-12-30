@@ -207,12 +207,7 @@ SAMPLES_LANGUAGE=<en_ou_fr>
 python utils/generate_users_acl_rd.py
 ```
 
-**6.** Démarrez les conteneurs Docker :
-```bash
-docker compose up -d 
-```
-
-**7.** Générez les certificats SSL pour HTTPS :
+**6.** Générez les certificats SSL pour HTTPS :
 
 <details>
 <summary>Utilisateurs Windows ⬇️</summary>
@@ -224,11 +219,16 @@ Si votre système d'exploitation est Windows et que OpenSSL n'est pas installé 
 python utils/setup_ssl.py
 ```
 
+**7.** Démarrez les conteneurs Docker :
+```bash
+docker compose up -d 
+```
+
 **8.** Configurez les instances PostgresSQL :
 <details>
   <summary>Configuration PostgreSQL ⬇️</summary>
   <br>
-  
+
   Chaque conteneur PostgreSQL est une instance indépendante, agissant comme un serveur hébergeant des bases de données dédiées à des fonctions spécifiques : base globale des utilisateurs, base des mots de passe des utilisateurs, base des mots de passe des conseillers.
 
   **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les variables PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créées dans `.env`) 
