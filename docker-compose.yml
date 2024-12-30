@@ -12,6 +12,7 @@ services:
     volumes:
       - ./databases/redis/redis-words-data:/data
       - ./databases/redis/redis-conf/redis-words-conf:/usr/local/etc/redis
+      - ./ssl_certificates:/etc/redis/certs
     command: redis-server /usr/local/etc/redis/redis.conf
   
   redis-passwords:
@@ -27,6 +28,7 @@ services:
     volumes:
       - ./databases/redis/redis-passwords-data:/data
       - ./databases/redis/redis-conf/redis-passwords-conf:/usr/local/etc/redis
+      - ./ssl_certificates:/etc/redis/certs
     command: redis-server /usr/local/etc/redis/redis.conf
 
   redis-users-sessions:
@@ -42,6 +44,7 @@ services:
     volumes:
       - ./databases/redis/redis-users-sessions-data:/data
       - ./databases/redis/redis-conf/redis-users-sessions-conf:/usr/local/etc/redis
+      - ./ssl_certificates:/etc/redis/certs
     command: redis-server /usr/local/etc/redis/redis.conf
 
   postgres-users:
@@ -92,6 +95,7 @@ services:
     depends_on:
       - redis-words
       - redis-passwords
+      - redis-users-sessions
     ports:
       - "5540:5540"
     networks:

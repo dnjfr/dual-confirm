@@ -24,7 +24,6 @@ def client_auth():
     
     # Handle the case where no customer is selected
     if user_id is None or user_id == "" or user_id == "Empty" or user_id == "None" or user_id == "0":
-        print("Aucun client sélectionné")
         return jsonify({"message": "No customer selected"})
     
     # Update selection status in Redis

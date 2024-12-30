@@ -11,21 +11,58 @@ load_dotenv(override=True)
 #                               REDIS                               # #                                                                   #
 #####################################################################
 
+
+# Get a connection to the Redis database with TLS authentication
+def get_redis_connection_with_tls(host, port, username, password, db=0):
+    """
+    Establish a secure Redis connection with TLS
+    """
+    try:
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        # Configuration TLS
+        ssl_cert_reqs = 'required'  # Or 'none' if no need to verify the certificate
+        ssl_ca_certs = os.path.join(base_dir, 'ssl_certificates', 'ca.pem')
+        ssl_certfile = os.path.join(base_dir, 'ssl_certificates', 'cert.pem')
+        ssl_keyfile = os.path.join(base_dir, 'ssl_certificates', 'key.pem')
+
+        redis_connection = redis.StrictRedis(
+            host=host,
+            port=port,
+            username=username,
+            password=password,
+            db=db,
+            ssl=True,
+            ssl_cert_reqs=ssl_cert_reqs,
+            ssl_ca_certs=ssl_ca_certs,
+            ssl_certfile=ssl_certfile,
+            ssl_keyfile=ssl_keyfile,
+            ssl_check_hostname=False
+        )
+        
+        # Check the connection
+        redis_connection.ping()
+        return redis_connection
+    except Exception as e:
+        print(f"Redis connection error with TLS: {e}")
+        raise
+
+
+
 # Get a connection to the Redis database of common words used to generate random passwords function
 def get_redis_words_connection():
     """
     Establishes and returns a connection to the Redis common words database
     """
     try:
-        redis_words = redis.StrictRedis( 
+        redis_words = get_redis_connection_with_tls(
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
             port=int(os.getenv("REDIS_DB_WORDS_PORT") or 6379),
             username=os.getenv("REDIS_DB_WORDS_USER"),
             password=os.getenv("REDIS_DB_WORDS_PASSWORD"),
             db=0)
         
-        # Vérifie la connexion
-        redis_words.ping()
+        # # Check the connection
+        # redis_words.ping()
         return redis_words
     except Exception as e:
         print(f"Error connecting to Redis Words: {e}")
@@ -42,15 +79,13 @@ def get_redis_passwords_connection():
     Establishes and returns a connection to the Redis password database
     """
     try:
-        redis_passwords = redis.StrictRedis(
+        redis_passwords = get_redis_connection_with_tls(
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
             port=int(os.getenv("REDIS_DB_PASSWORDS_PORT") or 6389),
             username=os.getenv("REDIS_DB_PASSWORDS_USER"),
             password=os.getenv("REDIS_DB_PASSWORDS_PASSWORD"),
             db=0)
         
-        # Vérifie la connexion
-        redis_passwords.ping()
         return redis_passwords
     except Exception as e:
         print(f"Error connecting to Redis Passwords: {e}")
@@ -67,15 +102,13 @@ def get_redis_users_sessions_connection():
     Establishes and returns a connection to the Redis database of current user sessions
     """
     try:
-        redis_users_sessions = redis.StrictRedis( 
+        redis_users_sessions = get_redis_connection_with_tls( 
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
             port=int(os.getenv("REDIS_DB_USERS_SESSIONS_PORT") or 6399),
             username=os.getenv("REDIS_DB_USERS_SESSIONS_USER"),
             password=os.getenv("REDIS_DB_USERS_SESSIONS_PASSWORD"),
             db=0)
         
-        # Vérifie la connexion
-        redis_users_sessions.ping()
         return redis_users_sessions
     except Exception as e:
         print(f"Error connecting to Redis Redis Users Sessions: {e}")

@@ -126,7 +126,7 @@ Advisor: "My password is 'diamond'."
 ### Prerequisites
 - Docker and Docker Compose
 - Python 3.11+
-- OpenSSL (optional, for local HTTPS setup)
+- OpenSSL
 
 ### Installation
 <details>
@@ -209,77 +209,7 @@ pip install -r requirements.txt
 python utils/generate_users_acl_rd.py
 ```
 
-**6.** Start the Docker containers:
-```bash
-docker compose up -d
-```
-
-**7.** Set up databases:
-<details>
-  <summary>PostgreSQL Setup ⬇️</summary>
-  <br>
-
-  **7.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD variables created in `.env`) 
-
-  **7.2.** To configure a server, click on "Add new server"
-
-  **7.3.** Configure users database server:
-  - Server name: postgres-users
-  - Host: 172.25.0.5
-  - Port: 5432
-  - Username: `<your_identifier_for_users_base>`
-  - Password: `<your_password_for_users_base>`
-
-  **7.4.** Configure audit database server:
-  - Server name: postgres-audit
-  - Host: 172.25.0.6
-  - Port: 5432
-  - Username: `<your_identifier_for_audit_base>`
-  - Password: `<your_password_for_audit_base>`
-
-  **7.5.** Create 3 databases in server postgres-users : 
-  - All users base : DC_PG_USERS_ADVISORS
-  - Users passwords base : DC_PG_USERS_PASSWORDS
-  - Avisors passwords base : DC_PG_ADVISORS_PASSWORDS
-
-  **7.6.** Create the database in server postgres-audit :  
-  - Passwords pair and users sessions audit base : DC_PG_AUDIT
-</details>
-
-<details>
-  <summary>Redis Setup ⬇️</summary>
-  <br>
-
-  **7.7.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> and click on "Add Redis database"
-
-  **7.8.** Configure common words database instance:
-  - Host: 172.25.0.2
-  - Port: 6379
-  - Database Alias: DC_RD_WORDS
-  - Username: `<your_identifier_for_common_words_base>`
-  - Password: `<your_password_for_common_words_base>`
-
-  **7.9.** Configure passwords database instance:
-  - Host: 172.25.0.3
-  - Port: 6379
-  - Database Alias: DC_RD_PASSWORDS
-  - Username: `<your_identifier_for_generated_passwords_base>`
-  - Password: `<your_password_for_generated_passwords_base>`
-
-  **7.10.** Configure sessions database instance:
-  - Host: 172.25.0.4
-  - Port: 6379
-  - Database Alias: DC_RD_USERS_SESSIONS
-  - Username: `<your_identifier_for_users_sessions_base>`
-  - Password: `<your_password_for_users_sessions_base>`
-</details>
-
-**8.** Run database setup script (the process can take a while, have a ☕):
-```bash
-python setup_db_creation_population.py
-```
-
-**9.** Generate SSL certificates for HTTPS (optional):
+**6.** Generate SSL certificates for HTTPS (optional):
 
 <details>
 <summary>Windows users ⬇️</summary>
@@ -291,9 +221,99 @@ If your operating system is Windows and OpenSSL is not installed on your machine
 python utils/setup_ssl.py
 ```
 
-Then modify `app.py` file depending on whether or not SSL is used.
+**7.** Start the Docker containers:
+```bash
+docker compose up -d
+```
 
-**10.** Open two terminals (make sure both terminals have `.venv` activated) and start the application:
+**8.** Configure PostgresSQL instances:
+<details>
+  <summary>PostgreSQL Setup ⬇️</summary>
+  <br>
+
+  Each PostgreSQL container is an independent instance, acting as a server hosting databases dedicated to specific functions: global user database, user password database, advisor password database.
+
+  **8.1.** Access pgAdmin at <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (please wait a few seconds while the service starts) and enter your email/password (PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD variables created in `.env`) 
+
+  **8.2.** To configure a server, click on "Add new server"
+
+  **8.3.** Configure users database server:
+  - Server name: postgres-users
+  - Host: 172.25.0.5
+  - Port: 5432
+  - Username: `<your_identifier_for_users_base>`
+  - Password: `<your_password_for_users_base>`
+
+  **8.4.** Configure audit database server:
+  - Server name: postgres-audit
+  - Host: 172.25.0.6
+  - Port: 5432
+  - Username: `<your_identifier_for_audit_base>`
+  - Password: `<your_password_for_audit_base>`
+
+  **8.5.** Create 3 databases in server postgres-users : 
+  - All users base : DC_PG_USERS_ADVISORS
+  - Users passwords base : DC_PG_USERS_PASSWORDS
+  - Avisors passwords base : DC_PG_ADVISORS_PASSWORDS
+
+  **8.6.** Create the database in server postgres-audit :  
+  - Passwords pair and users sessions audit base : DC_PG_AUDIT
+</details>
+
+
+**9.** Configure Redis instances:
+<details>
+  <summary>Redis Setup ⬇️</summary>
+  <br>
+
+  Each Redis container is an independent instance, used as a dedicated database for a specific purpose: common words, passwords, or sessions.
+
+  **9.1.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> and click on "Add Redis database"
+
+  **9.2.** Configure common words database instance:
+  - Host: 172.25.0.2
+  - Port: 6379
+  - Database Alias: DC_RD_WORDS
+  - Username: `<your_identifier_for_common_words_base>`
+  - Password: `<your_password_for_common_words_base>`
+  - Click on "Use TLS"
+  - Click on "Verify TLS Certificate"
+  - Add new CA Certificate
+  - Enter a name (for example "Redis CA")
+  - In the "CA Certificate" field, paste content from `ca.pem` file generated in `ssl_certificates` folder
+  - Click on "Requires TLS Client Authentication"
+  - Add new Certificate
+  - Enter a name (for example "Redis Client")
+  - In the "Client Certificate" field, paste content from `cert.pem` file
+  - In the "Private Key" field, paste content from `key.pem` file
+
+  **9.3.** Configure passwords database instance:
+  - Host: 172.25.0.3
+  - Port: 6379
+  - Database Alias: DC_RD_PASSWORDS
+  - Username: `<your_identifier_for_generated_passwords_base>`
+  - Password: `<your_password_for_generated_passwords_base>`
+  - Click on "Use TLS"
+  - Click on "Verify TLS Certificate" and "Requires TLS Client Authentication"
+  - You can now choose "Redis CA" and "Redis Client" certificates previously generated
+
+  **9.4.** Configure sessions database instance:
+  - Host: 172.25.0.4
+  - Port: 6379
+  - Database Alias: DC_RD_USERS_SESSIONS
+  - Username: `<your_identifier_for_users_sessions_base>`
+  - Password: `<your_password_for_users_sessions_base>`
+  - Click on "Use TLS"
+  - Click on "Verify TLS Certificate" and "Requires TLS Client Authentication"
+  - You can now choose "Redis CA" and "Redis Client" certificates previously generated
+</details>
+
+**10.** Run database setup script (the process can take a while, have a ☕):
+```bash
+python setup_db_creation_population.py
+```
+
+**11.** Open two terminals (make sure both terminals have `.venv` activated) and start the application:
 ```bash
 # Terminal 1: Start password generation service
 python passwords_generation.py

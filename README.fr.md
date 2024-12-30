@@ -212,74 +212,7 @@ python utils/generate_users_acl_rd.py
 docker compose up -d 
 ```
 
-**7.** Configurez les bases de données :
-<details>
-  <summary>Configuration PostgreSQL ⬇️</summary>
-  <br>
-
-  **7.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les variables PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créées dans `.env`) 
-
-  **7.2.** Pour configurer un serveur, cliquez sur "Add new server"
-
-  **7.3.** Configurez le serveur de base de données utilisateurs :
-  - Nom du serveur : postgres-users
-  - Hôte : 172.25.0.5
-  - Port : 5432
-  - Nom d'utilisateur : `<votre_identifiant_pour_base_utilisateurs>`
-  - Mot de passe : `<votre_mot_de_passe_pour_base_utilisateurs>`
-
-  **7.4.** Configurez le serveur de base de données d'audit :
-  - Nom du serveur : postgres-audit
-  - Hôte : 172.25.0.6
-  - Port : 5432
-  - Nom d'utilisateur : `<votre_identifiant_pour_base_audit>`
-  - Mot de passe : `<votre_mot_de_passe_pour_base_audit>`
-
-  **7.5.** Créez 3 bases de données dans le serveur postgres-users :
-  - Base de tous les utilisateurs : DC_PG_USERS_ADVISORS
-  - Base des mots de passe utilisateurs : DC_PG_USERS_PASSWORDS
-  - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
-
-  **7.6.** Créez la base de données dans le serveur postgres-audit :
-  - Base d'audit des paires de mots de passe et des sessions utilisateurs : DC_PG_AUDIT
-</details>
-
-<details>
-  <summary>Configuration Redis ⬇️</summary>
-  <br>
-
-  **7.7.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
-
-
-  **7.8.** Configurez l'instance de base de données des mots courants :
-  - Hôte : 172.25.0.2
-  - Port : 6379
-  - Alias base de données : DC_RD_WORDS
-  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_courants>`
-  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_courants>`
-
-  **7.9.** Configurez l'instance de base de données des mots de passe :
-  - Hôte : 172.25.0.3
-  - Port : 6379
-  - Alias base de données : DC_RD_PASSWORDS
-  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
-  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
-
-  **7.10.** Configurez l'instance de base de données des sessions :
-  - Hôte : 172.25.0.4
-  - Port : 6379
-  - Alias base de données : DC_RD_USERS_SESSIONS
-  - Nom d'utilisateur : `<votre_identifiant_pour_base_session_utilisateur>`
-  - Mot de passe : `<votre_mot_de_passe_pour_base_session_utilisateur>`
-
-</details>
-
-**8.** Exécutez le script de configuration des bases de données (le process peut être long, prenez un ☕) :
-```bash
-python setup_db_creation_population.py
-```
-
-**9.** Générez les certificats SSL pour HTTPS (optionnel) :
+**7.** Générez les certificats SSL pour HTTPS :
 
 <details>
 <summary>Utilisateurs Windows ⬇️</summary>
@@ -291,9 +224,93 @@ Si votre système d'exploitation est Windows et que OpenSSL n'est pas installé 
 python utils/setup_ssl.py
 ```
 
-Modifiez ensuite le fichier `app.py` en fonction de l'utilisation ou non de SSL.
+**8.** Configurez les instances PostgresSQL :
+<details>
+  <summary>Configuration PostgreSQL ⬇️</summary>
+  <br>
+  Chaque conteneur PostgreSQL est une instance indépendante, agissant comme un serveur hébergeant des bases de données dédiées à des fonctions spécifiques : base globale des utilisateurs, base des mots de passe des utilisateurs, base des mots de passe des conseillers.
 
-**10.** Ouvrez deux terminaux (vérifiez bien que les deux terminaux ont `.venv` activés) et démarrez l'application :
+  **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les variables PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créées dans `.env`) 
+
+  **8.2.** Pour configurer un serveur, cliquez sur "Add new server"
+
+  **8.3.** Configurez le serveur de base de données utilisateurs :
+  - Nom du serveur : postgres-users
+  - Hôte : 172.25.0.5
+  - Port : 5432
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_utilisateurs>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_utilisateurs>`
+
+  **8.4.** Configurez le serveur de base de données d'audit :
+  - Nom du serveur : postgres-audit
+  - Hôte : 172.25.0.6
+  - Port : 5432
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_audit>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_audit>`
+
+  **8.5.** Créez 3 bases de données dans le serveur postgres-users :
+  - Base de tous les utilisateurs : DC_PG_USERS_ADVISORS
+  - Base des mots de passe utilisateurs : DC_PG_USERS_PASSWORDS
+  - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
+
+  **8.6.** Créez la base de données dans le serveur postgres-audit :
+  - Base d'audit des paires de mots de passe et des sessions utilisateurs : DC_PG_AUDIT
+</details>
+
+**9.** Configurez les instances Redis :
+<details>
+  <summary>Configuration Redis ⬇️</summary>
+  <br>
+  Chaque conteneur Redis est une instance indépendante, utilisée comme une base de données dédiée pour une fonction spécifique : mots communs, mots de passe, ou sessions.
+
+  **9.1.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
+
+
+  **9.2.** Configurez l'instance de base de données des mots courants :
+  - Hôte : 172.25.0.2
+  - Port : 6379
+  - Alias base de données : DC_RD_WORDS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_courants>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_courants>`
+  - Cliquez sur "Use TLS"
+  - Cliquez sur "Verify TLS Certificate"
+  - Ajoutez un nouveau certificat CA
+  - Saisissez un nom (par exemple "Redis CA")
+  - Dans le champ "CA Certificate", collez le contenu du fichier `ca.pem` généré dans le dossier `ssl_certificates`
+  - Cliquez sur "Requires TLS Client Authentication"
+  - Ajoutez un nouveau certificat
+  - Saisissez un nom (par exemple "Redis Client")
+  - Dans le champ "Client Certificate", collez le contenu du fichier `cert.pem`
+  - Dans le champ "Private Key", collez le contenu du fichier `key.pem`
+
+  **9.3.** Configurez l'instance de base de données des mots de passe :
+  - Hôte : 172.25.0.3
+  - Port : 6379
+  - Alias base de données : DC_RD_PASSWORDS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
+  - Cliquez sur "Use TLS"
+  - Cliquez sur "Verify TLS Certificate" et "Requires TLS Client Authentication"
+  - Vous pouvez maintenant choisir les certificats « Redis CA » et « Redis Client » précédemment générés
+
+  **9.4.** Configurez l'instance de base de données des sessions :
+  - Hôte : 172.25.0.4
+  - Port : 6379
+  - Alias base de données : DC_RD_USERS_SESSIONS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_session_utilisateur>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_session_utilisateur>`
+  - Cliquez sur "Use TLS"
+  - Cliquez sur "Verify TLS Certificate" et "Requires TLS Client Authentication"
+  - Vous pouvez maintenant choisir les certificats « Redis CA » et « Redis Client » précédemment générés
+
+</details>
+
+**10.** Exécutez le script de configuration des bases de données (le process peut être long, prenez un ☕) :
+```bash
+python setup_db_creation_population.py
+```
+
+**11.** Ouvrez deux terminaux (vérifiez bien que les deux terminaux ont `.venv` activés) et démarrez l'application :
 ```bash
 # Terminal 1 : Démarrez le service de génération de mots de passe
 python passwords_generation.py

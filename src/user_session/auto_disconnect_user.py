@@ -18,7 +18,7 @@ def auto_disconnect_user(user_id, advisor_id, role):
     active_key = f"active_status:{role}:{identifier}"
     
     # Wait 60 seconds
-    print("Attente de 60 secondes")
+    print("Wait 60 seconds")
     time.sleep(60)
     
     # Check both statuses
