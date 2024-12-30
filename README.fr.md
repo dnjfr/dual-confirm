@@ -124,7 +124,7 @@ Conseiller : "Mon mot de passe est 'diamant'."
 ### Prérequis
 - Docker et Docker Compose
 - Python 3.11+
-- OpenSSL (optionnel, pour la configuration HTTPS locale)
+- OpenSSL
 
 ### Installation
 <details>
@@ -228,6 +228,7 @@ python utils/setup_ssl.py
 <details>
   <summary>Configuration PostgreSQL ⬇️</summary>
   <br>
+  
   Chaque conteneur PostgreSQL est une instance indépendante, agissant comme un serveur hébergeant des bases de données dédiées à des fonctions spécifiques : base globale des utilisateurs, base des mots de passe des utilisateurs, base des mots de passe des conseillers.
 
   **8.1.** Accédez à pgAdmin sur <a href="http://localhost:5050/" target="_blank">http://localhost:5050/</a> (attendez quelques secondes le temps que le service démarre) et entrez votre email/mot_de_passe (ce sont les variables PGADMIN_DEFAULT_EMAIL et PGADMIN_DEFAULT_PASSWORD créées dans `.env`) 
@@ -261,6 +262,7 @@ python utils/setup_ssl.py
 <details>
   <summary>Configuration Redis ⬇️</summary>
   <br>
+
   Chaque conteneur Redis est une instance indépendante, utilisée comme une base de données dédiée pour une fonction spécifique : mots communs, mots de passe, ou sessions.
 
   **9.1.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"

@@ -5,6 +5,10 @@ from src.db_management.db_configurations import redis_users_sessions, redis_get
 from src.routes.logout import logout
 
 
+# Inactivity timeout delay
+inacitivy_time_out = 180
+
+
 # Automatically disconnect a user when status is "disconnecting" and countdown to 0 function
 def auto_disconnect_user(user_id, advisor_id, role):
     """
@@ -17,9 +21,9 @@ def auto_disconnect_user(user_id, advisor_id, role):
     connection_key = f"connection_status:{role}:{identifier}"
     active_key = f"active_status:{role}:{identifier}"
     
-    # Wait 60 seconds
-    print("Wait 60 seconds")
-    time.sleep(60)
+    # Timeout trigger
+    print("Wait 180 seconds")
+    time.sleep(inacitivy_time_out)
     
     # Check both statuses
     current_active_status = redis_get(redis_users_sessions, active_key)
