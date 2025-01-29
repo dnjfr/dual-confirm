@@ -16,3 +16,4 @@ compare*
 *-legacy.*
 *-noauth.*
 *DRAFT*
+__pycache__/
