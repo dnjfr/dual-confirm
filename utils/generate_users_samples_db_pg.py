@@ -1,8 +1,14 @@
 from src.db_management.db_configurations import users_db_connection, users_db_cursor
 
 
-# User table creation and index function
 def create_users_table_and_index(table_name):
+    """
+    Creates the users table and associated indexes if they do not exist.
+    
+    Args:
+    table_name (str): Name of the users table.
+    """
+    
     try:
         users_db_cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
@@ -22,8 +28,14 @@ def create_users_table_and_index(table_name):
         print(f"Error creating {table_name} table: {e}")
 
 
-# Advisor table creation and index function
 def create_advisors_table_and_index(table_name):
+    """
+    Creates the advisors table and associated indexes if they do not exist.
+    
+    Args:
+    table_name (str): Name of the advisors table.
+    """
+    
     try:
         users_db_cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
@@ -41,8 +53,14 @@ def create_advisors_table_and_index(table_name):
         print(f"Error creating {table_name} table: {e}")
 
 
-# Users_Advisors table creation and index function
 def create_users_advisors_table_and_index(table_name):
+    """
+    Creates the users-advisors mapping table and indexes.
+    
+    Args:
+    table_name (str): Name of the mapping table.
+    """
+    
     try:
         users_db_cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
@@ -60,8 +78,15 @@ def create_users_advisors_table_and_index(table_name):
         print(f"Error creating {table_name} table: {e}")
 
 
-# Populate the users table function
 def populate_table_users(table_name, data):
+    """
+    Populates the users table from a DataFrame.
+    
+    Args:
+    table_name (str): Target users table.
+    data (pandas.DataFrame): Users data.
+    """
+    
     for index, row in data.iterrows():
         try:
             users_db_cursor.execute(f"""
@@ -80,7 +105,16 @@ def populate_table_users(table_name, data):
     users_db_connection.commit()
     print(f"{len(data)} users processed.")
 
+
 def populate_table_adivsors(table_name, data):
+    """
+    Populates the advisors table from a DataFrame.
+    
+    Args:
+    table_name (str): Target advisors table.
+    data (pandas.DataFrame): Advisors data.
+    """
+    
     for index, row in data.iterrows():
         try:
             users_db_cursor.execute(f"""
@@ -98,7 +132,16 @@ def populate_table_adivsors(table_name, data):
     users_db_connection.commit()
     print(f"{len(data)} advisors processed.")
 
+
 def populate_table_users_advisors(table_name, data):
+    """
+    Populates the users-advisors relationship table.
+    
+    Args:
+    table_name (str): Target mapping table.
+    data (pandas.DataFrame): Relationship data.
+    """
+    
     for index, row in data.iterrows():
         try:
             users_db_cursor.execute(f"""

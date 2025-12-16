@@ -5,12 +5,19 @@ from src.authentification.jwt_requirement import jwt_required
 from src.db_management.db_configurations import users_db_cursor, users_tablename, advisors_tablename, users_advisors_tablename
 
 
-
-# Advisor home page route
 @app.route("/advisor-dashboard")
 @login_required(role='advisor')
 @jwt_required(otp_manager)
 def advisor_dashboard():
+    """
+    Renders the advisor dashboard.
+    
+    Loads advisor information and the list of associated clients.
+    
+    Returns:
+        Response: Rendered advisor dashboard page.
+    """
+    
     advisor_id = session.get('advisor_id')
     
     if not advisor_id:

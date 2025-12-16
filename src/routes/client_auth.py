@@ -6,12 +6,20 @@ from src.db_management.db_configurations import users_db_cursor, users_tablename
 from passwords_generation import generate_password_on_demand, get_password_and_timer
 
 
-
-# Client file page on the advisor dashboard route
 @app.route("/client-auth")
 @login_required(role='advisor')
 @jwt_required(otp_manager)
 def client_auth():
+    """
+    Handles client selection and authentication from the advisor dashboard.
+    
+    Manages selection state, triggers password generation if needed,
+    and returns client and advisor contextual data.
+    
+    Returns:
+        dict or Response: Client authentication data or error message.
+    """
+    
     advisor_id = session.get('advisor_id')
     user_id = request.args.get('user_id')
     

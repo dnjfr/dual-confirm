@@ -26,11 +26,18 @@ configs = {
     }
 }
 
+
 def generate_users_acl():
-# Generate and write `users.acl` files for each instance
+    """
+    Generates Redis ACL configuration files for each Redis instance.
+    
+    The function creates user access rules based on environment
+    variables and writes them to the appropriate ACL files.
+    """
+    
     for instance, path in paths.items():
         user = configs[instance]
-
+        
         if user["username"] and user["password"]:
             if user["username"] == os.getenv("REDIS_DB_PASSWORDS_USER"):
                 # Add ability to monitor expired keys in Redis
@@ -43,8 +50,9 @@ def generate_users_acl():
             with open(path, "w") as acl_file:
                 acl_file.write(acl_content)
             print(f"File '{path}' generated successfully.")
-
+            
         else:
             print(f"Missing configuration for instance '{instance}'.")
+
 
 generate_users_acl()

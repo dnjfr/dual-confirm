@@ -12,11 +12,24 @@ load_dotenv(override=True)
 #####################################################################
 
 
-# Get a connection to the Redis database with TLS authentication
 def get_redis_connection_with_tls(host, port, username, password, db=0):
     """
-    Establish a secure Redis connection with TLS
+    Establishes a secure Redis connection using TLS authentication.
+    
+    Args:
+    host (str): Redis host.
+    port (int): Redis port.
+    username (str): Redis ACL username.
+    password (str): Redis ACL password.
+    db (int): Redis database index.
+    
+    Returns:
+    redis.Redis: Authenticated Redis connection.
+    
+    Raises:
+    Exception: If the connection or TLS handshake fails.
     """
+    
     try:
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         # Configuration TLS
@@ -24,7 +37,7 @@ def get_redis_connection_with_tls(host, port, username, password, db=0):
         ssl_ca_certs = os.path.join(base_dir, 'ssl_certificates', 'ca.pem')
         ssl_certfile = os.path.join(base_dir, 'ssl_certificates', 'cert.pem')
         ssl_keyfile = os.path.join(base_dir, 'ssl_certificates', 'key.pem')
-
+        
         redis_connection = redis.StrictRedis(
             host=host,
             port=port,
@@ -47,12 +60,14 @@ def get_redis_connection_with_tls(host, port, username, password, db=0):
         raise
 
 
-
-# Get a connection to the Redis database of common words used to generate random passwords function
 def get_redis_words_connection():
     """
-    Establishes and returns a connection to the Redis common words database
+    Creates a Redis connection dedicated to the common words database.
+    
+    Returns:
+    redis.Redis: Redis connection for common words storage.
     """
+    
     try:
         redis_words = get_redis_connection_with_tls(
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
@@ -67,17 +82,18 @@ def get_redis_words_connection():
     except Exception as e:
         print(f"Error connecting to Redis Words: {e}")
         raise
-    
-        
+
 redis_words = get_redis_words_connection()
 
 
-
-# Get a connection to the Redis database of randomly generated passwords function
 def get_redis_passwords_connection():
     """
-    Establishes and returns a connection to the Redis password database
+    Creates a Redis connection dedicated to generated passwords storage.
+    
+    Returns:
+    redis.Redis: Redis connection for passwords database.
     """
+    
     try:
         redis_passwords = get_redis_connection_with_tls(
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
@@ -91,16 +107,17 @@ def get_redis_passwords_connection():
         print(f"Error connecting to Redis Passwords: {e}")
         raise
 
-
 redis_passwords = get_redis_passwords_connection()
 
 
-
-# Get a connection to the Redis database of current user sessions function
 def get_redis_users_sessions_connection():
     """
-    Establishes and returns a connection to the Redis database of current user sessions
+    Creates a Redis connection dedicated to active user sessions.
+    
+    Returns:
+    redis.Redis: Redis connection for user sessions.
     """
+    
     try:
         redis_users_sessions = get_redis_connection_with_tls( 
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
@@ -114,17 +131,35 @@ def get_redis_users_sessions_connection():
         print(f"Error connecting to Redis Redis Users Sessions: {e}")
         raise
 
-
 redis_users_sessions = get_redis_users_sessions_connection()
 
 
-
-# Utility for storing in Redis
 def redis_set(redis_db,key, value, ex=None):
+    """
+    Stores a UTF-8 encoded value in Redis.
+    
+    Args:
+    redis_db (redis.Redis): Redis connection.
+    key (str): Redis key.
+    value (str): Value to store.
+    ex (int, optional): Expiration time in seconds.
+    """
+    
     redis_db.set(key, value.encode("utf-8"), ex=ex)
 
-# Utility to read from Redis
+
 def redis_get(redis_db, key):
+    """
+    Retrieves and decodes a value from Redis.
+    
+    Args:
+    redis_db (redis.Redis): Redis connection.
+    key (str): Redis key.
+    
+    Returns:
+    str or None: Decoded value if present, otherwise None.
+    """
+    
     value = redis_db.get(key)
     if isinstance(value, bytes):
         return value.decode("utf-8")
@@ -137,11 +172,15 @@ def redis_get(redis_db, key):
 #                             POSTGRES                              # #                                                                   #
 #####################################################################
 
-# Get a connection to the users database function 
+
 def get_users_db_connection():
     """
-    Establishes and returns a connection to the users database
+    Establishes a connection to the users database.
+    
+    Returns:
+    psycopg2.connection: Users database connection.
     """
+    
     try:
         connection = psycopg2.connect(
             host=os.getenv("GLOBAL_HOST_NETWORK"),
@@ -155,7 +194,6 @@ def get_users_db_connection():
         print(f"Error connecting to users database: {e}")
         raise
 
-
 users_db_connection = get_users_db_connection()
 users_db_cursor = users_db_connection.cursor()
 users_tablename = os.getenv("POSTGRES_DB_USERS_TABLENAME_USERS")
@@ -163,12 +201,14 @@ advisors_tablename = os.getenv("POSTGRES_DB_USERS_TABLENAME_ADVISORS")
 users_advisors_tablename = os.getenv("POSTGRES_DB_USERS_TABLENAME_USERS_ADVISORS")
 
 
-
-# Get a connection to the customer password database function
 def get_users_passwords_db_connection():
     """
-    Establishes and returns a connection to the client password database
+    Establishes a connection to the users passwords database.
+    
+    Returns:
+    psycopg2.connection: Users passwords database connection.
     """
+    
     try:
         connection = psycopg2.connect(
             host=os.getenv("GLOBAL_HOST_NETWORK"),
@@ -182,18 +222,19 @@ def get_users_passwords_db_connection():
         print(f"Error connecting to user password database: {e}")
         raise
 
-
 users_passwords_db_connection = get_users_passwords_db_connection()
 users_passwords_db_cursor = users_passwords_db_connection.cursor()
 users_passwords_tablename = os.getenv("POSTGRES_DB_USERS_PASSWORD_TABLENAME_USERS_PASSWORD")
 
 
-
-# Get a connection to the password advisors database function
 def get_advisors_passwords_db_connection():
     """
-    Establishes and returns a connection to the password advisor database
+    Establishes a connection to the advisors passwords database.
+    
+    Returns:
+    psycopg2.connection: Advisors passwords database connection.
     """
+    
     try:
         connection = psycopg2.connect(
             host=os.getenv("GLOBAL_HOST_NETWORK"),
@@ -207,18 +248,19 @@ def get_advisors_passwords_db_connection():
         print(f"Error connecting to the password advisor database: {e}")
         raise
 
-
 advisors_passwords_db_connection = get_advisors_passwords_db_connection()
 advisors_passwords_db_cursor = advisors_passwords_db_connection.cursor()
 advisors_passwords_tablename = os.getenv("POSTGRES_DB_ADVISORS_PASSWORD_TABLENAME_ADVISORS_PASSWORD")
 
 
-
-# Get a connection to the audit database function
 def get_audit_db_connection():
     """
-    Establishes and returns a connection to the audit database
+    Establishes a connection to the audit database.
+    
+    Returns:
+    psycopg2.connection: Audit database connection.
     """
+    
     try:
         connection = psycopg2.connect(
             host=os.getenv("GLOBAL_HOST_NETWORK"),
@@ -231,7 +273,6 @@ def get_audit_db_connection():
     except Exception as e:
         print(f"Audit database connection error: {e}")
         raise
-
 
 audit_db_connection = get_audit_db_connection()
 audit_db_cursor = audit_db_connection.cursor()

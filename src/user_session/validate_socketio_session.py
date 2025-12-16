@@ -5,8 +5,15 @@ from flask import session
 # Session validation for Socket.IO function
 def validate_socketio_session():
     """
-    Validates the Socket.IO session by checking the session information.
+    Validates the current Socket.IO session.
+    
+    The function checks that the user is logged in and has a valid role
+    defined in the Flask session.
+    
+    Returns:
+        bool: True if the session is valid, False otherwise.
     """
+    
     try:
         # Retrieve session information
         session_data = session.get('logged_in')

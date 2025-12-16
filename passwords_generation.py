@@ -9,25 +9,46 @@ from src.db_management.db_configurations import get_audit_db_connection, passwor
 delay_regeneration = 30 # TTL - Time period between password expiration and renewal"-
 
 
-# Check connection status function
 def is_connected(user_id=None, advisor_id=None):
     """
-    Checks if a user or advisor is logged in.
+    Checks whether a client or advisor is currently connected.
+    
+    The function verifies the connection status stored in Redis
+    based on the provided user or advisor identifier.
+    
+    Args:
+        user_id (str, optional): Client identifier.
+        advisor_id (str, optional): Advisor identifier.
+        
+    Returns:
+        bool: True if the entity is connected, False otherwise.
     """
+    
     if user_id:
         connection_key = f"connection_status:client:{user_id}"
     elif advisor_id:
         connection_key = f"connection_status:advisor:{advisor_id}"
     else:
         return False
-
+    
     return redis_get(redis_users_sessions, connection_key) == "connected"
 
-# check if a client is selected by the advisor function
+
 def is_selected(advisor_id, user_id):
     """
-    Checks if a customer is selected by an advisor.
+    Checks whether a client is currently selected by an advisor.
+    
+    Selection status is stored in Redis and is used to control
+    authorization for password regeneration and updates.
+    
+    Args:
+        advisor_id (str): Advisor identifier.
+        user_id (str): Client identifier or "Empty" to reset selections.
+        
+    Returns:
+        bool: True if the client is selected, False otherwise.
     """
+    
     selection_key = f"selection_status:{advisor_id}:{user_id}"
     
     # If user_id is "Empty", delete all existing selection keys
@@ -40,25 +61,48 @@ def is_selected(advisor_id, user_id):
     
     return redis_get(redis_users_sessions, selection_key) == "selected"
 
-# Check if the user is active on his dashboard function
+
 def is_active(user_id=None, advisor_id=None):
     """
-    Checks if a user or advisor is active.
+    Checks whether a client or advisor is currently active.
+    
+    Activity status is tracked in Redis and reflects dashboard usage.
+    
+    Args:
+        user_id (str, optional): Client identifier.
+        advisor_id (str, optional): Advisor identifier.
+        
+    Returns:
+        bool: True if active, False otherwise.
     """
+    
     if user_id:
         active_key = f"active_status:client:{user_id}"
     elif advisor_id:
         active_key = f"active_status:advisor:{advisor_id}"
     else:
         return False
-
+    
     return redis_get(redis_users_sessions, active_key) == "active"
 
-# On-demand generation with memoization function
+
 def generate_password_on_demand(user_id, advisor_id, timer=delay_regeneration):
     """
-    Generate passwords on demand with memoization to avoid duplicates
+    Generates user and advisor passwords on demand with Redis-based locking.
+    
+    The function prevents concurrent regeneration, reuses valid passwords
+    when possible, stores credentials in Redis with a TTL, and audits
+    generation events in PostgreSQL.
+    
+    Args:
+        user_id (str): Client identifier.
+        advisor_id (str): Advisor identifier.
+        timer (int): Password validity duration in seconds.
+        
+    Returns:
+        dict: Generated passwords and remaining TTL values, or None on failure.
     """
+    
     try:
         # Creating a unique lock key
         lock_key = f"lock:password:{user_id}:{advisor_id}"
@@ -71,14 +115,14 @@ def generate_password_on_demand(user_id, advisor_id, timer=delay_regeneration):
             try:
                 # First check if the passwords already exist and are valid
                 existing_passwords = get_password_and_timer(user_id, advisor_id)
-
+                
                 # If existing passwords are still valid, they are reused.
                 if (existing_passwords['user_pwd'] and 
                     existing_passwords['user_ttl'] > 0 and 
                     existing_passwords['advisor_pwd'] and 
                     existing_passwords['advisor_ttl'] > 0):
                     return existing_passwords
-
+                
                 # Only if passwords have expired, we regenerate
                 user_pwd = generate_password()
                 advisor_pwd = generate_password()
@@ -115,19 +159,31 @@ def generate_password_on_demand(user_id, advisor_id, timer=delay_regeneration):
             finally:
                 # Libére le verrou
                 lock.release()
-
+                
         else:
             print(f"[INFO] Regeneration in progress for {user_id} - {advisor_id}. Waiting...")
             # Recover existing passwords
             return get_password_and_timer(user_id, advisor_id)
-
+        
     except Exception as e:
         print(f"Error acquiring lock: {e}")
     return None
 
 
-# Retrieve passwords and TTL from Redis function
 def get_password_and_timer(user_id, advisor_id):
+    """
+    Retrieves passwords and their remaining TTL from Redis.
+    
+    If passwords do not exist or have expired, empty values are returned.
+    
+    Args:
+        user_id (str): Client identifier.
+        advisor_id (str): Advisor identifier.
+        
+    Returns:
+        dict: Passwords and TTLs for both client and advisor.
+    """
+    
     user_key = f"password:user:{user_id}:advisor:{advisor_id}"
     advisor_key = f"password:advisor:{advisor_id}:user:{user_id}"
     
@@ -145,7 +201,7 @@ def get_password_and_timer(user_id, advisor_id):
             "advisor_pwd": None,
             "advisor_ttl": 0
         }
-
+        
     return {
         "user_pwd": user_pwd,
         "user_ttl": user_ttl,
@@ -154,8 +210,16 @@ def get_password_and_timer(user_id, advisor_id):
     }
 
 
-# Retrieve a word from Redis function
 def get_random_word():
+    """
+    Retrieves a random word from Redis.
+    
+    Used as the base for password generation.
+    
+    Returns:
+        str or None: Random word if available, otherwise None.
+    """
+    
     # Retrieves keys synchronously
     keys = cast(list, (redis_words.keys("word:*")))
     
@@ -170,19 +234,45 @@ def get_random_word():
     return word
 
 
-# Generate random password function
 def generate_password():
+    """
+    Generates a password using a random word source.
+    
+    Returns:
+        str: Generated password.
+    """
+    
     selected_word = get_random_word()
     return f"{selected_word}"
 
 
-# Hash a password function
 def hash_password(password):
+    """
+    Hashes a plaintext password using bcrypt.
+    
+    Args:
+        password (str): Plaintext password.
+        
+    Returns:
+        str: Hashed password.
+    """
+    
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
-# Audit passwords in PostgreSQL function
 def audit_passwords(user_id, hashed_user_pwd, advisor_id, hashed_advisor_pwd):
+    """
+    Stores password generation events in the audit database.
+    
+    Used for security tracking and compliance purposes.
+    
+    Args:
+        user_id (str): Client identifier.
+        hashed_user_pwd (str): Client password hash.
+        advisor_id (str): Advisor identifier.
+        hashed_advisor_pwd (str): Advisor password hash.
+    """
+    
     try:
         
         audit_db_connection = get_audit_db_connection()
@@ -202,14 +292,22 @@ def audit_passwords(user_id, hashed_user_pwd, advisor_id, hashed_advisor_pwd):
         print(f"Unexpected error while auditing passwords for {user_id} et {advisor_id} : {e}")
 
 
-# Monitor Redis events and regenerate expired passwords function
 def listen_for_expired_keys():
+    """
+    Listens to Redis key expiration events to trigger password regeneration.
+    
+    When a password expires, the function evaluates connection, activity,
+    and selection status before regenerating credentials.
+    
+    Runs indefinitely as a Redis Pub/Sub listener.
+    """
+    
     try:
         redis_passwords.config_set('notify-keyspace-events', 'Ex')
         
         pubsub = redis_passwords.pubsub()
         pubsub.psubscribe("__keyevent@0__:expired")
-
+        
         print("Redis event listening enabled.")
         for message in pubsub.listen():
             if message["type"] == "pmessage":
@@ -249,7 +347,7 @@ def listen_for_expired_keys():
     except Exception as e:
         print(f"Error listening to Redis events: {e}")
 
-# Exécution
+
 if __name__ == "__main__":
     
     listen_for_expired_keys()

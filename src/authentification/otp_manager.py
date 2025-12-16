@@ -8,17 +8,19 @@ from flask import request
 from src.db_management.db_configurations import users_sessions_audit_tablename, users_advisors_tablename
 
 
-# OTP and JWT token manager
 class OTPManager:
     def __init__(self, redis_connection, key_rotation_manager, audit_db_connection, users_db_connection):
         """
-        OTP and JWT token manager
-
+        Initializes the OTPManager with required dependencies and starts
+        a background thread for periodic OTP cleanup.
+        
         Args:
-        redis_connection (redis.Redis): Redis connection
-        key_rotation_manager (KeyRotationManager): Key rotation manager
-        audit_db_connection (psycopg2.connection): Audit database connection
+        redis_connection (redis.Redis): Redis connection used to store OTP tokens.
+        key_rotation_manager (KeyRotationManager): Manager handling JWT secret rotation.
+        audit_db_connection (psycopg2.connection): Database connection for audit logs.
+        users_db_connection (psycopg2.connection): Database connection for user-advisor mapping.
         """
+        
         self.redis = redis_connection
         self.key_rotation_manager = key_rotation_manager
         self.audit_db_connection = audit_db_connection
@@ -27,18 +29,19 @@ class OTPManager:
         # Configuring periodic cleaning of expired OTPs
         self.cleanup_thread = threading.Thread(target=self._periodic_otp_cleanup, daemon=True)
         self.cleanup_thread.start()
-    
-    # Retrieve the advisor_id associated with a user_id function
+
+
     def _get_advisor_id(self, user_id):
         """
         Retrieves the advisor_id associated with a user_id
-
+        
         Args:
         user_id (str): User ID
-
+        
         Returns:
         str or None: The ID of the associated advisor
         """
+        
         try:
             with self.users_db_connection.cursor() as cursor:
                 cursor.execute(f"""
@@ -51,17 +54,26 @@ class OTPManager:
         except Exception as e:
             logging.error(f"Error retrieving advisor_id: {e}")
             return None
-    
-    # OTP Generation function
+
+
     def generate_otp(self, user_id=None, advisor_id=None, expiration_minutes=15):
         """
-        Generate an OTP and store it in cache with JWT
-
-        Storage:
-        - Redis key: "otp:{user_id}"
-        - user_id (str, optional): Client user ID
-        - advisor_id (str, optional): Advisor ID
-        - Expiration: Based on the validity period of the OTP
+        Generates a One-Time Password (OTP) wrapped in a JWT token and stores it in Redis.
+        
+        The OTP can be generated either for a client (user_id) or directly for an advisor.
+        If an OTP already exists and is still valid, it is reused.
+        
+        Args:
+        user_id (str, optional): Client user ID.
+        advisor_id (str, optional): Advisor ID.
+        expiration_minutes (int): OTP validity duration in minutes.
+        
+        Returns:
+        str: Encoded JWT token containing the OTP and related metadata.
+        
+        Raises:
+        ValueError: If neither user_id nor advisor_id is provided, or if the advisor_id
+                    cannot be resolved.
         """
         
         if not user_id and not advisor_id:
@@ -123,18 +135,21 @@ class OTPManager:
         
         return jwt_token
 
-    # Decode a token
+
     def _decode_token(self, token):
         """
-        Decode a JWT token by trying different keys
-
-        Strategy:
-        1. Try with current key
-        2. If fail, try with previous key
-
+        Decodes a JWT token using the current or previous signing secret.
+        
+        The method first attempts decoding with the current secret key.
+        If it fails and a previous key exists, it retries with the previous key.
+        
+        Args:
+        token (str): JWT token to decode.
+        
         Returns:
-        dict: Decoded Payload or None
+        dict or None: Decoded JWT payload if valid, otherwise None.
         """
+        
         try:
             # Try with the current key
             payload = jwt.decode(
@@ -162,9 +177,26 @@ class OTPManager:
                     logging.error(f"Error with previous key: {e}")
                     return None
             return None
-    
-    # OTP Verification
+
+
     def validate_otp(self, token, user_id=None, advisor_id=None):
+        """
+        Validates an OTP JWT token against expiration, timestamps,
+        and expected identity (user or advisor).
+        
+        Validation rules differ depending on whether the token is checked
+        for a client or an advisor.
+        
+        Args:
+        token (str): JWT token containing the OTP.
+        user_id (str, optional): Expected client user ID.
+        advisor_id (str, optional): Expected advisor ID.
+        
+        Returns:
+        bool: True if the token is valid and matches the expected identity,
+            False otherwise.
+        """
+        
         payload = self._decode_token(token)
         
         if not payload:
@@ -173,13 +205,13 @@ class OTPManager:
         now = datetime.now()
         exp = payload.get('exp')
         iat = payload.get('iat')
-
-        # Expiration Check
+        
+        # Expiration check
         if not exp or now > datetime.fromtimestamp(exp):
             logging.error(f"Token expired: exp={exp}, now={now}")
             return False
-
-        # Vérification du timestamp initial
+        
+        # Initial timestamp check
         if not iat or now < datetime.fromtimestamp(iat):
             logging.error(f"Invalid token timestamp: iat={iat}, now={now}")
             return False
@@ -201,20 +233,19 @@ class OTPManager:
                 payload.get('user_id') == user_id and 
                 payload.get('advisor_id') is not None
             )
-
+            
         # If no ID is specified, the token is considered valid.
         return False
-    
-    # Periodic cleaning of expired OTPs
+
+
     def _periodic_otp_cleanup(self):
         """
-        Periodically clean expired OTPs in Redis
-
-        Strategy:
-        - Loop through all OTP keys
-        - Delete expired ones
-        - Run every hour
+        Periodically scans Redis to remove expired or invalid OTP tokens.
+        
+        The cleanup process runs in a background daemon thread and executes
+        once every hour.
         """
+        
         while True:
             try:
                 # Wait one hour between each cleaning
@@ -235,9 +266,21 @@ class OTPManager:
                             logging.error(f"Error while cleaning {key}: {e}")
             except Exception as e:
                 logging.error(f"Error in periodic cleaning of OTPs: {e}")
-    
-    # OTP Generation Audit Function
+
+
     def _audit_otp_generation(self, user_id, advisor_id, status='success'):
+        """
+        Records an audit entry for OTP generation events.
+        
+        The audit log stores information such as role, timestamp,
+        IP address, user agent, and generation status.
+        
+        Args:
+        user_id (str or None): Client user ID if applicable.
+        advisor_id (str): Advisor ID associated with the OTP.
+        status (str): Status of the OTP generation (default: 'success').
+        """
+        
         try:
             role = 'advisor' if not user_id else 'client'
             with self.audit_db_connection.cursor() as cursor:
@@ -264,10 +307,21 @@ class OTPManager:
                 self.audit_db_connection.commit()
         except Exception as e:
             logging.error(f"OTP Audit Error: {e}")
-    
-    
-    # Logout audit function
+
+
     def _audit_logout(self, user_id, advisor_id):
+        """
+        Records a logout event by updating the latest session entry
+        with logout timestamp and session duration.
+        
+        The method retrieves the most recent login record and computes
+        the session duration based on the current time.
+        
+        Args:
+        user_id (str or None): Client user ID.
+        advisor_id (str or None): Advisor ID.
+        """
+        
         try:
             with self.audit_db_connection.cursor() as cursor:
                 # Retrieve the last login record for this user

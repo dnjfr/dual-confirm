@@ -3,11 +3,22 @@ from src.authentification.key_rotation import KeyRotationManager
 from src.authentification.otp_manager import OTPManager
 
 
-# Initializing the OTP Manager
 def init_otp_management(redis_connection, audit_db_connection, users_db_connection):
     """
-    Initializes the OTP manager with key rotation
+    Initializes and wires the OTP management system.
+    
+    This function creates a key rotation manager and an OTP manager
+    using the provided Redis and database connections.
+    
+    Args:
+    redis_connection (redis.Redis): Redis connection used for OTP storage.
+    audit_db_connection (psycopg2.connection): Database connection for audit logs.
+    users_db_connection (psycopg2.connection): Database connection for user data.
+    
+    Returns:
+    OTPManager: Fully initialized OTP manager instance.
     """
+    
     # Generate an initial secret key
     initial_secret = os.getenv('JWT_SECRET')
     

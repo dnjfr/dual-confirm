@@ -9,10 +9,18 @@ from src.routes.logout import logout
 inacitivy_time_out = 180
 
 
-# Automatically disconnect a user when status is "disconnecting" and countdown to 0 function
 def auto_disconnect_user(user_id, advisor_id, role):
     """
-    Disconnect a user when status is "disconnecting" and countdown to 0
+    Automatically disconnects a user after an inactivity timeout.
+    
+    The function waits for a predefined delay, checks the user's
+    connection and activity status in Redis, and triggers a logout
+    if the user is still marked as "disconnecting".
+    
+    Args:
+        user_id (str): Client identifier.
+        advisor_id (str): Advisor identifier.
+        role (str): User role ("client" or "advisor").
     """
     
     identifier = user_id if role == 'client' else advisor_id
@@ -30,7 +38,7 @@ def auto_disconnect_user(user_id, advisor_id, role):
     current_connection_status = redis_get(redis_users_sessions,connection_key)
     
     if current_active_status == "disconnecting" or current_connection_status == "disconnecting":
-        print("Déconnection")
+        print("Disconnect")
         # The user has not returned, we are logging out
         with app.test_request_context('/logout'):
             # Using mocked session with user information

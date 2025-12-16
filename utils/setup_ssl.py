@@ -1,24 +1,30 @@
 import os
 import subprocess
 
+
 def generate_ssl_certificates():
     """
-    Generates the SSL certificates needed for TLS:
-    - Authority certificate (CA)
-    - Server certificate signed by the CA
-    - Associated private keys
+    Generates all SSL assets required for TLS communication.
+    
+    This function creates a Certificate Authority (CA), a server private key,
+    and a server certificate signed by the CA using OpenSSL commands.
+    Certificates are generated only if they do not already exist.
+    
+    Raises:
+        subprocess.CalledProcessError: If any OpenSSL command fails.
     """
+    
     cert_dir = os.path.join(os.path.dirname(__file__), '..', 'ssl_certificates')
     os.makedirs(cert_dir, exist_ok=True)
     
-    # Chemins des fichiers
+    # Files paths
     ca_key_path = os.path.join(cert_dir, 'ca.key')
     ca_cert_path = os.path.join(cert_dir, 'ca.pem')
     cert_path = os.path.join(cert_dir, 'cert.pem')
     key_path = os.path.join(cert_dir, 'key.pem')
     csr_path = os.path.join(cert_dir, 'server.csr')
     
-    # Vérifie si les certificats existent déjà
+    # Certificates Checks
     if (not os.path.exists(ca_cert_path) or 
         not os.path.exists(cert_path) or 
         not os.path.exists(key_path)):
@@ -26,14 +32,14 @@ def generate_ssl_certificates():
         print("Generating SSL Certificates...")
         
         try:
-            # 1. Générer la clé privée du CA
+            # 1. Generate CA private key
             subprocess.run([
                 "openssl", "genrsa",
                 "-out", ca_key_path,
                 "4096"
             ], check=True)
             
-            # 2. Générer le certificat CA auto-signé
+            # 2. Generate auto-signed CA certificate
             subprocess.run([
                 "openssl", "req", "-x509", "-new", "-nodes",
                 "-key", ca_key_path,
@@ -42,21 +48,22 @@ def generate_ssl_certificates():
                 "-out", ca_cert_path,
             ], check=True)
             
-            # 3. Générer la clé privée du serveur
+            # 3. Generate server private key
             subprocess.run([
                 "openssl", "genrsa",
                 "-out", key_path,
                 "2048"
             ], check=True)
             
-            # 4. Créer la demande de signature de certificat (CSR)
+            # 4. Create Certificate Signing Request (CSR)
+            
             subprocess.run([
                 "openssl", "req", "-new",
                 "-key", key_path,
                 "-out", csr_path,
             ], check=True)
             
-            # 5. Signer le certificat serveur avec le CA
+            # 5. Sign the server certificate with the CA
             subprocess.run([
                 "openssl", "x509", "-req",
                 "-in", csr_path,
@@ -68,7 +75,7 @@ def generate_ssl_certificates():
                 "-sha256"
             ], check=True)
             
-            # 6. Nettoyer les fichiers temporaires
+            # 6. Clean up temporary files
             os.remove(csr_path)
             os.remove(ca_key_path)
             if os.path.exists(os.path.join(cert_dir, 'ca.srl')):
@@ -81,7 +88,7 @@ def generate_ssl_certificates():
             
         except subprocess.CalledProcessError as e:
             print(f"Error generating certificates: {e}")
-            # Nettoyer les fichiers partiellement créés en cas d'erreur
+            # Clean up partially created files in case of error
             for file in [ca_key_path, ca_cert_path, cert_path, key_path, csr_path]:
                 if os.path.exists(file):
                     os.remove(file)

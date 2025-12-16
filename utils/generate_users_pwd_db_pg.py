@@ -3,8 +3,14 @@ import bcrypt
 from src.db_management.db_configurations import users_passwords_db_connection, advisors_passwords_db_connection, users_passwords_db_cursor, advisors_passwords_db_cursor
 
 
-# Users passwords table creation function
 def create_users_passwords_tables(table_name):
+    """
+    Creates the users passwords table if it does not exist.
+
+    Args:
+    table_name (str): Name of the table to create.
+    """
+    
     try:
         users_passwords_db_cursor.execute(f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
@@ -17,8 +23,14 @@ def create_users_passwords_tables(table_name):
         print(f"Error creating {table_name} table: {e}")
 
 
-# Advisors passwords table creation function
 def create_advisors_passwords_tables(table_name):
+    """
+    Creates the advisors passwords table if it does not exist.
+
+    Args:
+    table_name (str): Name of the table to create.
+    """
+    
     try:
         advisors_passwords_db_cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
@@ -31,13 +43,31 @@ def create_advisors_passwords_tables(table_name):
         print(f"Error creating {table_name} table: {e}")
 
 
-# Hash password function 
 def hash_password(password):
-    """Hash a single password using bcrypt"""
+    """
+    Hashes a plaintext password using bcrypt.
+
+    Args:
+    password (str): Plaintext password.
+
+    Returns:
+    str: Securely hashed password.
+    """
+    
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
-# Insert password into database function
+
 def insert_password(row, table_name, db_connection_function, identifier):
+    """
+    Inserts a hashed password into the database.
+
+    Args:
+    row (tuple): Identifier and hashed password.
+    table_name (str): Target database table.
+    db_connection_function (psycopg2.connection): Database connection.
+    identifier (str): Column name used as identifier.
+    """
+    
     try:
         connection = db_connection_function
         cursor = connection.cursor()
@@ -56,8 +86,19 @@ def insert_password(row, table_name, db_connection_function, identifier):
         connection.close()
 
 
-# Insert hashed passwords function
 def populate_passwords(csv_file, table_name, identifier, db_connection_function):
+    """
+    Populates a passwords table from a CSV file.
+    
+    Passwords are hashed before insertion and duplicates are ignored.
+    
+    Args:
+    csv_file (str): Path to the CSV file.
+    table_name (str): Target database table.
+    identifier (str): Identifier column name.
+    db_connection_function (psycopg2.connection): Database connection.
+    """
+    
     try:
         # Read the CSV file
         df = pd.read_csv(csv_file, sep=";", header=0)

@@ -13,10 +13,10 @@ samples_language = os.getenv("SAMPLES_LANGUAGE")
 
 
 # Redis common words database population
-
 commonwords_csv_file = f"samples-datas/words/{samples_language}/words.csv"
 
 populate_common_words_db(commonwords_csv_file)
+
 
 # Creating tables and importing user test data
 users_csv_file = pd.read_csv(f"samples-datas/users-data/{samples_language}/users.csv", sep=';')
@@ -31,6 +31,7 @@ populate_table_users(users_tablename, users_csv_file)
 populate_table_adivsors(advisors_tablename, advisors_csv_file)
 populate_table_users_advisors(users_advisors_tablename, users_advisors_csv_file)
 
+
 # Creating tables and importing data and generating hashed passwords for test users
 users_passwords_csv_file = f"samples-datas/users-passwords/{samples_language}/users_passwords.csv"
 advisors_passwords_csv_file = f"samples-datas/users-passwords/{samples_language}/advisors_passwords.csv"
@@ -41,6 +42,7 @@ create_advisors_passwords_tables(advisors_passwords_tablename)
 populate_passwords(users_passwords_csv_file, users_passwords_tablename, 'user_id', users_passwords_db_connection)
 
 populate_passwords(advisors_passwords_csv_file, advisors_passwords_tablename, 'advisor_id', advisors_passwords_db_connection)
+
 
 # Creating audit tables
 create_passwords_generation_audit_table(passwords_generation_audit_tablename)

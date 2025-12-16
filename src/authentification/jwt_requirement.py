@@ -2,14 +2,27 @@ from functools import wraps
 from flask import redirect, current_app, session, url_for
 from src.db_management.db_configurations import redis_users_sessions, redis_get
 
-# Decorator connection
+
 def jwt_required(otp_manager):
     """
-    Decorator to secure routes with JWT
-
+    Decorator factory that secures Flask routes using JWT-based OTP validation.
+    
+    This decorator verifies that:
+    - A JWT token exists in the user session
+    - The token is present in Redis
+    - The token is valid and not expired
+    - The token matches the expected identity based on the user role (advisor or client)
+    
+    If any validation step fails, the user session is cleared and
+    the request is redirected to the login page.
+    
     Args:
-    otp_manager (OTPManager): OTP manager instance
+    otp_manager (OTPManager): Instance responsible for decoding and validating OTP JWT tokens.
+    
+    Returns:
+    callable: A decorator that wraps a Flask route with JWT authentication logic.
     """
+    
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

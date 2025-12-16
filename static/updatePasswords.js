@@ -1,13 +1,42 @@
 import { resetTimer } from "./timerManagement.js";
 
-/// Update passwords in real time function
+
 export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElement) => {
+    /** 
+        * Manages real-time password updates via Socket.IO.
+        *
+        * Listens for password update events, updates the UI securely,
+        * resets timers, handles internationalization, and ensures
+        * proper cleanup of listeners and intervals.
+        *
+        * @param {Object} socket - Active Socket.IO connection.
+        * @param {string} userId - Client identifier.
+        * @param {HTMLElement} clientPwdElement - DOM element displaying client password.
+        * @param {HTMLElement} advisorPwdElement - DOM element displaying advisor password.
+        *
+        * @returns {Function} Cleanup function to remove listeners and intervals.
+    */
+
     // Variables to manage intervals and listeners
     let passwordUpdateInterval = null;
     let isUpdating = false;
     
     // Secure update feature with i18n support
     const updatePasswordDisplay = (data) => {
+        /**
+            * Updates password values and UI state in real time.
+            *
+            * Validates incoming data, updates client and advisor passwords,
+            * applies visual states (expired / updating), refreshes localized
+            * instructions, and resets the associated countdown timer.
+            *
+            * Concurrent updates are prevented using a locking mechanism.
+            *
+            * @param {Object} data - Payload received from the Socket.IO event.
+            * @param {Object} data.client - Client password and TTL information.
+            * @param {Object} data.advisor_client - Advisor password and TTL information.
+        */
+
         // Avoid simultaneous updates
         if (isUpdating) return;
         
@@ -58,8 +87,15 @@ export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElem
         }
     };
     
-    // Complete cleaning before new configuration
+
     const cleanupSocketListeners = () => {
+        /**
+            * Cleans up Socket.IO listeners and running intervals.
+            *
+            * Removes password update listeners and clears the periodic
+            * update interval to prevent memory leaks or duplicated events.
+        */
+        
         socket.off('update_passwords', updatePasswordDisplay);
         if (passwordUpdateInterval) {
             clearInterval(passwordUpdateInterval);
@@ -83,8 +119,15 @@ export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElem
         }
     }, 1000);
     
-    // Logout manager
+    
     const handleDisconnect = () => {
+        /**
+            * Handles socket disconnection events.
+            *
+            * Ensures all listeners and intervals are properly cleaned
+            * when the socket connection is terminated.
+        */
+        
         cleanupSocketListeners();
     };
     

@@ -15,5 +15,5 @@ app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET")
 app.logger.setLevel(logging.DEBUG)
 
 
-# Initialisation JWT
+# JWT init
 otp_manager = init_otp_management(redis_users_sessions, audit_db_connection, users_db_connection)

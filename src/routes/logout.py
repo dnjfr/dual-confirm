@@ -8,8 +8,15 @@ from src.db_management.db_configurations import redis_users_sessions
 @app.route('/logout')
 def logout():
     """
-    Handles logout by removing the associated JWT token.
+    Handles user logout and session cleanup.
+    
+    Removes JWT tokens, Redis session keys, audits the logout event,
+    and clears the Flask session.
+    
+    Returns:
+        Response: Redirect to login page.
     """
+    
     # Retrieves the session or header token
     token = session.get('jwt_token')
     user_id = session.get('user_id')

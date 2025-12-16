@@ -10,19 +10,33 @@ from passwords_generation import generate_password_on_demand, get_password_and_t
 session_duration = 900
 
 
-
-# Listening to the connection
 @socketio.on('connect')
 def handle_connect():
+    """
+    Validates Socket.IO connections.
+    
+    Rejects connections if the user session is invalid or expired.
+    """
+    
     # Check the session before allowing the connection
     if not validate_socketio_session():
         return False  # Rejects the connection
 
-# Login decorator
+
 def login_required(role=None):
-    def decorated(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
+    """
+    Decorator enforcing authentication and optional role-based access.
+    
+    Args:
+        role (str, optional): Required user role ('client' or 'advisor').
+        
+    Returns:
+        function: Wrapped route function.
+    """
+    
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
             # Check the connection
             if 'logged_in' not in session:
                 return redirect(url_for('login', next=request.url))
@@ -31,14 +45,24 @@ def login_required(role=None):
             if role and session.get('role') != role:
                 abort(403)  # Forbidden
             
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorated
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
 
 
-# Login route
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Handles user authentication for clients and advisors.
+    
+    Validates credentials, generates OTP tokens, initializes sessions,
+    and redirects users to the appropriate dashboard.
+    
+    Returns:
+        Response: Redirect or rendered login page.
+    """
+    
     message = None
     
     # If the user is already logged in, check the validity of the token
@@ -114,7 +138,7 @@ def login():
                 # Add connection state in Redis
                 connection_key = f"connection_status:{session['role']}:{username}"
                 redis_set(redis_users_sessions, connection_key, "connected", ex=session_duration)                  
-
+                
                 # Add activity state in Redis
                 active_key = f"active_status:{session['role']}:{username}"
                 redis_set(redis_users_sessions, active_key, "active")
@@ -152,7 +176,7 @@ def login():
             
             return redirect(url_for('advisor_dashboard'))
         
-        # Si échec
+        # If fail
         message = "Incorrect username or password."
         otp_manager._audit_otp_generation(
             username, 

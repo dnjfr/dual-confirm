@@ -5,10 +5,19 @@ from src.db_management.db_configurations import users_db_cursor, users_tablename
 from passwords_generation import get_password_and_timer
 
 
-
-# Socket.IO Endpoint for real time update
 @socketio.on('request_update')
 def handle_request_update(data=None):
+    """
+    Handles real-time password updates via Socket.IO.
+    
+    The function validates the session role (advisor or client),
+    verifies access permissions, retrieves user and advisor data,
+    and emits updated password information to the client.
+    
+    Args:
+    data (dict, optional): Payload containing request context.
+    """
+    
     # Verification of received data
     if not data or not isinstance(data, dict):
         # Do not emit anything if this is a first load or missing data

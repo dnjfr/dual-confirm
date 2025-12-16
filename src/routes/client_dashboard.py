@@ -6,12 +6,20 @@ from src.db_management.db_configurations import users_db_cursor, users_tablename
 from passwords_generation import get_password_and_timer
 
 
-
-# Home page client route
 @app.route("/client-dashboard")
 @login_required(role='client')
 @jwt_required(otp_manager)
 def client_dashboard():
+    """
+    Renders the client dashboard.
+    
+    Displays advisor details, client information,
+    and current authentication credentials.
+    
+    Returns:
+        Response: Rendered client dashboard page.
+    """
+    
     user_id = session.get('user_id')
     
     if not user_id:

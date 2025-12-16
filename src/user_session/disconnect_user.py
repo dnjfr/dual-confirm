@@ -4,10 +4,19 @@ from src.user_session.common import get_identifier_and_role
 from src.user_session.auto_disconnect_user import auto_disconnect_user
 
 
-
-# Listening for socket messages to mark user inactive
 @socketio.on('disconnect_user')
 def handle_disconnect_user(data):
+    """
+    Marks a user as inactive and initiates a logout countdown.
+    
+    The function updates the activity status to "disconnecting"
+    and starts a background task to automatically disconnect
+    the user after the inactivity timeout.
+    
+    Args:
+        data (dict): Payload containing user identification data.
+    """
+    
     identifier, role, user_id, advisor_id = get_identifier_and_role(data)
     
     if identifier and role:

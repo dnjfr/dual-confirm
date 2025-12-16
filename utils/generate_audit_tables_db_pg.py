@@ -1,6 +1,14 @@
 from src.db_management.db_configurations import audit_db_connection, audit_db_cursor
 
+
 def create_passwords_generation_audit_table(table_name):
+    """
+    Creates the passwords generation audit table if it does not exist.
+    
+    Args:
+    table_name (str): Name of the audit table to create.
+    """
+    
     try:
         audit_db_cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
@@ -19,9 +27,16 @@ def create_passwords_generation_audit_table(table_name):
         audit_db_connection.commit()
     except Exception as e:
         print(f"Error creating {table_name} table: {e}")
-        
+
 
 def create_sessions_users_audit_table(table_name):
+    """
+    Creates the users sessions audit table if it does not exist.
+    
+    Args:
+    table_name (str): Name of the sessions audit table.
+    """
+    
     try:
         audit_db_cursor.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} (
