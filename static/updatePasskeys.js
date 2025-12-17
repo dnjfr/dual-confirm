@@ -1,40 +1,40 @@
 import { resetTimer } from "./timerManagement.js";
 
 
-export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElement) => {
+export const updatePasskeys = (socket, userId, clientPasskeyElement, advisorPasskeyElement) => {
     /** 
-        * Manages real-time password updates via Socket.IO.
+        * Manages real-time passkey updates via Socket.IO.
         *
-        * Listens for password update events, updates the UI securely,
+        * Listens for passkey update events, updates the UI securely,
         * resets timers, handles internationalization, and ensures
         * proper cleanup of listeners and intervals.
         *
         * @param {Object} socket - Active Socket.IO connection.
         * @param {string} userId - Client identifier.
-        * @param {HTMLElement} clientPwdElement - DOM element displaying client password.
-        * @param {HTMLElement} advisorPwdElement - DOM element displaying advisor password.
+        * @param {HTMLElement} clientPasskeyElement - DOM element displaying client passkey.
+        * @param {HTMLElement} advisorPasskeyElement - DOM element displaying advisor passkey.
         *
         * @returns {Function} Cleanup function to remove listeners and intervals.
     */
 
     // Variables to manage intervals and listeners
-    let passwordUpdateInterval = null;
+    let passkeyUpdateInterval = null;
     let isUpdating = false;
     
     // Secure update feature with i18n support
-    const updatePasswordDisplay = (data) => {
+    const updatePasskeyDisplay = (data) => {
         /**
-            * Updates password values and UI state in real time.
+            * Updates passkey values and UI state in real time.
             *
-            * Validates incoming data, updates client and advisor passwords,
+            * Validates incoming data, updates client and advisor passkeys,
             * applies visual states (expired / updating), refreshes localized
             * instructions, and resets the associated countdown timer.
             *
             * Concurrent updates are prevented using a locking mechanism.
             *
             * @param {Object} data - Payload received from the Socket.IO event.
-            * @param {Object} data.client - Client password and TTL information.
-            * @param {Object} data.advisor_client - Advisor password and TTL information.
+            * @param {Object} data.client - Client passkey and TTL information.
+            * @param {Object} data.advisor_client - Advisor passkey and TTL information.
         */
 
         // Avoid simultaneous updates
@@ -51,26 +51,26 @@ export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElem
             }
             
             // Update items
-            if (clientPwdElement) {
-                clientPwdElement.textContent = data.client.user_pwd || i18next.t('updating');
-                clientPwdElement.classList.toggle('updating-text', data.client.user_ttl < 1);
+            if (clientPasskeyElement) {
+                clientPasskeyElement.textContent = data.client.user_passkey || i18next.t('updating');
+                clientPasskeyElement.classList.toggle('updating-text', data.client.user_ttl < 1);
                 
-                const clientPwdBox = clientPwdElement.closest('.password-box');
-                if (clientPwdBox) {
-                    const instruction = clientPwdBox.querySelector('.instruction[data-i18n]');
+                const clientPasskeyBox = clientPasskeyElement.closest('.passkey-box');
+                if (clientPasskeyBox) {
+                    const instruction = clientPasskeyBox.querySelector('.instruction[data-i18n]');
                     if (instruction) {
                         instruction.textContent = i18next.t(instruction.getAttribute('data-i18n'));
                     }
                 }
             }
             
-            if (advisorPwdElement) {
-                advisorPwdElement.textContent = data.advisor_client.advisor_pwd || i18next.t('updating');
-                advisorPwdElement.classList.toggle('updating-text', data.advisor_client.advisor_ttl < 1);
+            if (advisorPasskeyElement) {
+                advisorPasskeyElement.textContent = data.advisor_client.advisor_passkey || i18next.t('updating');
+                advisorPasskeyElement.classList.toggle('updating-text', data.advisor_client.advisor_ttl < 1);
 
-                const advisorPwdBox = advisorPwdElement.closest('.password-box');
-                if (advisorPwdBox) {
-                    const instruction = advisorPwdBox.querySelector('.instruction[data-i18n]');
+                const advisorPasskeyBox = advisorPasskeyElement.closest('.passkey-box');
+                if (advisorPasskeyBox) {
+                    const instruction = advisorPasskeyBox.querySelector('.instruction[data-i18n]');
                     if (instruction) {
                         instruction.textContent = i18next.t(instruction.getAttribute('data-i18n'));
                     }
@@ -82,7 +82,7 @@ export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElem
             
             isUpdating = false;
         } catch (error) {
-            console.error('Error updating passwords:', error);
+            console.error('Error updating passkeys:', error);
             isUpdating = false;
         }
     };
@@ -92,14 +92,14 @@ export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElem
         /**
             * Cleans up Socket.IO listeners and running intervals.
             *
-            * Removes password update listeners and clears the periodic
+            * Removes passkey update listeners and clears the periodic
             * update interval to prevent memory leaks or duplicated events.
         */
         
-        socket.off('update_passwords', updatePasswordDisplay);
-        if (passwordUpdateInterval) {
-            clearInterval(passwordUpdateInterval);
-            passwordUpdateInterval = null;
+        socket.off('update_passkeys_pairs', updatePasskeyDisplay);
+        if (passkeyUpdateInterval) {
+            clearInterval(passkeyUpdateInterval);
+            passkeyUpdateInterval = null;
         }
     };
     
@@ -107,13 +107,13 @@ export const updatePasswords = (socket, userId, clientPwdElement, advisorPwdElem
     cleanupSocketListeners();
     
     // New secure configuration
-    socket.on('update_passwords', updatePasswordDisplay);
+    socket.on('update_passkeys_pairs', updatePasskeyDisplay);
     
     // First synchronization
     socket.emit('request_update', { user_id: userId });
     
     // Secure update interval
-    passwordUpdateInterval = setInterval(() => {
+    passkeyUpdateInterval = setInterval(() => {
         if (!isUpdating) {
             socket.emit('request_update', { user_id: userId });
         }

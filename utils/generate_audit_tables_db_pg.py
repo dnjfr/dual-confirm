@@ -1,9 +1,9 @@
 from src.db_management.db_configurations import audit_db_connection, audit_db_cursor
 
 
-def create_passwords_generation_audit_table(table_name):
+def create_passkeys_pairs_generation_audit_table(table_name):
     """
-    Creates the passwords generation audit table if it does not exist.
+    Creates the passkeys pairs generation audit table if it does not exist.
     
     Args:
     table_name (str): Name of the audit table to create.
@@ -14,9 +14,9 @@ def create_passwords_generation_audit_table(table_name):
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id SERIAL PRIMARY KEY,
                 user_id VARCHAR(10)NOT NULL,
-                user_pwd VARCHAR(60) NOT NULL,
+                user_passkey VARCHAR(60) NOT NULL,
                 advisor_id VARCHAR(10)NOT NULL,
-                advisor_pwd  VARCHAR(60) NOT NULL,
+                advisor_passkey  VARCHAR(60) NOT NULL,
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             DROP INDEX IF EXISTS idx_{table_name}_user_id;

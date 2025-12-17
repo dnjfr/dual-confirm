@@ -29,16 +29,16 @@
                     </div>
                     <div class="client-auth">
                         <div class="boxes">
-                            <div class="password-box">
-                                <div class="instruction" data-i18n="password_client_to_advisor"></div>
-                                <div class="password">
-                                    <span id="client_pwd" class="display-layer">{{ client.user_pwd }}</span>
+                            <div class="passkey-box">
+                                <div class="instruction" data-i18n="passkey_client_to_advisor"></div>
+                                <div class="passkey">
+                                    <span id="client_passkey" class="display-layer">{{ client.user_passkey }}</span>
                                 </div>
                             </div>
-                            <div class="password-box">
-                                <div class="instruction" data-i18n="password_client_from_advisor"></div>
-                                <div class="password">
-                                    <span id="advisor_client_pwd" class="display-layer">{{ advisor_client.advisor_pwd }}</span>
+                            <div class="passkey-box">
+                                <div class="instruction" data-i18n="passkey_client_from_advisor"></div>
+                                <div class="passkey">
+                                    <span id="advisor_client_passkey" class="display-layer">{{ advisor_client.advisor_passkey }}</span>
                                 </div>
                             </div>
                         </div>
@@ -52,24 +52,24 @@
             </main>
         </div>
         <script type="module">
-            import { updatePasswords } from './static/updatePasswords.js';
+            import { updatePasskeys } from './static/updatePasskeys.js';
             import { initI18n, localizeContent } from "./static/localization/localizeContent.js";
             
             document.addEventListener("DOMContentLoaded", async () => {
                 try {
                     const userId = document.body.dataset.userId;
-                    const client_pwd = document.getElementById('client_pwd');
-                    const advisor_client_pwd = document.getElementById('advisor_client_pwd');
+                    const client_passkey = document.getElementById('client_passkey');
+                    const advisor_client_passkey = document.getElementById('advisor_client_passkey');
                     
                     await initI18n();
                     localizeContent();
                     
                     const socket = io();
                     
-                    if (userId && client_pwd && advisor_client_pwd) {
-                        updatePasswords(socket, userId, client_pwd, advisor_client_pwd);
+                    if (userId && client_passkey && advisor_client_passkey) {
+                        updatePasskeys(socket, userId, client_passkey, advisor_client_passkey);
                     } else {
-                        console.error('Unable to find userId, client_pwd ou advisor_client_pwd');
+                        console.error('Unable to find userId, client_passkey ou advisor_client_passkey');
                     }
                     
                     // Fallback for older browsers

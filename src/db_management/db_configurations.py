@@ -86,28 +86,28 @@ def get_redis_words_connection():
 redis_words = get_redis_words_connection()
 
 
-def get_redis_passwords_connection():
+def get_redis_passkeys_pairs_connection():
     """
-    Creates a Redis connection dedicated to generated passwords storage.
+    Creates a Redis connection dedicated to generated passkeys pairs storage.
     
     Returns:
-    redis.Redis: Redis connection for passwords database.
+    redis.Redis: Redis connection for passkeys database.
     """
     
     try:
-        redis_passwords = get_redis_connection_with_tls(
+        redis_passkeys_pairs = get_redis_connection_with_tls(
             host=os.getenv("GLOBAL_HOST_NETWORK") or "localhost",
-            port=int(os.getenv("REDIS_DB_PASSWORDS_PORT") or 6389),
-            username=os.getenv("REDIS_DB_PASSWORDS_USER"),
-            password=os.getenv("REDIS_DB_PASSWORDS_PASSWORD"),
+            port=int(os.getenv("REDIS_DB_PASSKEYS_PORT") or 6389),
+            username=os.getenv("REDIS_DB_PASSKEYS_USER"),
+            password=os.getenv("REDIS_DB_PASSKEYS_PASSWORD"),
             db=0)
         
-        return redis_passwords
+        return redis_passkeys_pairs
     except Exception as e:
-        print(f"Error connecting to Redis Passwords: {e}")
+        print(f"Error connecting to Redis Passkeys: {e}")
         raise
 
-redis_passwords = get_redis_passwords_connection()
+redis_passkeys_pairs = get_redis_passkeys_pairs_connection()
 
 
 def get_redis_users_sessions_connection():
@@ -277,4 +277,4 @@ def get_audit_db_connection():
 audit_db_connection = get_audit_db_connection()
 audit_db_cursor = audit_db_connection.cursor()
 users_sessions_audit_tablename = os.getenv("POSTGRES_DB_AUDIT_TABLENAME_USERS_SESSIONS_AUDIT")
-passwords_generation_audit_tablename = os.getenv("POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT")
+passkeys_pairs_generation_audit_tablename = os.getenv("POSTGRES_DB_AUDIT_TABLENAME_PASSKEYS_PAIRS_GENERATION_AUDIT")

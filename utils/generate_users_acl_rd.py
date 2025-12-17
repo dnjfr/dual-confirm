@@ -6,7 +6,7 @@ load_dotenv(override=True)
 # Set directory paths for each Redis instance
 paths = {
     "redis-words": "databases/redis/redis-conf/redis-words-conf/users.acl",
-    "redis-passwords": "databases/redis/redis-conf/redis-passwords-conf/users.acl",
+    "redis-passkeys-pairs": "databases/redis/redis-conf/redis-passkeys-pairs-conf/users.acl",
     "redis-users-sessions": "databases/redis/redis-conf/redis-users-sessions-conf/users.acl",
 }
 
@@ -16,9 +16,9 @@ configs = {
         "username": os.getenv("REDIS_DB_WORDS_USER"),
         "password": os.getenv("REDIS_DB_WORDS_PASSWORD"),
     },
-    "redis-passwords": {
-        "username": os.getenv("REDIS_DB_PASSWORDS_USER"),
-        "password": os.getenv("REDIS_DB_PASSWORDS_PASSWORD"),
+    "redis-passkeys-pairs": {
+        "username": os.getenv("REDIS_DB_PASSKEYS_PAIRS_USER"),
+        "password": os.getenv("REDIS_DB_PASSKEYS_PAIRS_PASSWORD"),
     },
         "redis-users-sessions": {
         "username": os.getenv("REDIS_DB_USERS_SESSIONS_USER"),
@@ -39,7 +39,7 @@ def generate_users_acl():
         user = configs[instance]
         
         if user["username"] and user["password"]:
-            if user["username"] == os.getenv("REDIS_DB_PASSWORDS_USER"):
+            if user["username"] == os.getenv("REDIS_DB_PASSKEYS_PAIRS_USER"):
                 # Add ability to monitor expired keys in Redis
                 acl_content = f'user {user["username"]} on >{user["password"]} ~* +@all +@pubsub &__keyevent@0__:expired'
             else:

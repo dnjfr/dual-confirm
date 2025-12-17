@@ -179,16 +179,16 @@ pip install -r requirements.txt
     POSTGRES_DB_AUDIT_PORT=5431
     POSTGRES_DB_AUDIT_USER=<your_identifier_for_audit_base>
     POSTGRES_DB_AUDIT_PASSWORD=<your_password_for_audit_base>
-    POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT=passwords_generation_audit
+    POSTGRES_DB_AUDIT_TABLENAME_PASSKEYS_PAIRS_GENERATION_AUDIT=passkeys_pairs_generation_audit
     POSTGRES_DB_AUDIT_TABLENAME_USERS_SESSIONS_AUDIT=users_sessions_audit
 
     REDIS_DB_WORDS_PORT=6379
     REDIS_DB_WORDS_USER=<your_password_for_common_words_base>
     REDIS_DB_WORDS_PASSWORD=<your_password_for_common_words_base>
 
-    REDIS_DB_PASSWORDS_PORT=6389
-    REDIS_DB_PASSWORDS_USER=<your_identifier_for_generated_passwords_base>
-    REDIS_DB_PASSWORDS_PASSWORD=<your_password_for_generated_passwords_base>
+    REDIS_DB_PASSKEYS_PAIRS_PORT=6389
+    REDIS_DB_PASSKEYS_PAIRS_USER=<your_identifier_for_generated_passkeys_pairs_base>
+    REDIS_DB_PASSKEYS_PAIRS_PASSWORD=<your_password_for_generated_passkeys_pairs_base>
 
     REDIS_DB_USERS_SESSIONS_PORT=6399
     REDIS_DB_USERS_SESSIONS_USER=<your_identifier_for_users_sessions_base>
@@ -316,7 +316,7 @@ python setup_db_creation_population.py
 **11.** Open two terminals (make sure both terminals have `.venv` activated) and start the application:
 ```bash
 # Terminal 1: Start password generation service
-python passwords_generation.py
+python passkeys_pairs_generation.py
 
 # Terminal 2: Start main application
 python app.py

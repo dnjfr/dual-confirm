@@ -43,13 +43,13 @@
     "message": "Authentication:",
     "description": "Authentication box title"
   },
-  "password_client_to_advisor": {
-    "message": "Password to confirm to your advisor:",
-    "description": "Password to confirm to advisor"
+  "passkey_client_to_advisor": {
+    "message": "Passkey to confirm to your advisor:",
+    "description": "Passkey to confirm to advisor"
   },
-  "password_client_from_advisor": {
-    "message": "Password your advisor must confirm to you:",
-    "description": "Password the advisor must confirm to client"
+  "passkey_client_from_advisor": {
+    "message": "Passkey your advisor must confirm to you:",
+    "description": "Passkey the advisor must confirm to client"
   },
   "advisor_dashboard": {
     "message": "Advisor Dashboard",
@@ -67,16 +67,16 @@
     "message": "Client name: ",
     "description": "Client name"
   },
-  "password_advisor_to_client": {
-    "message": "Password to confirm to your client:",
-    "description": "Password the advisor must confirm to client"
+  "passkey_advisor_to_client": {
+    "message": "Passkey to confirm to your client:",
+    "description": "Passkey the advisor must confirm to client"
   },
-  "password_advisor_from_client": {
-    "message": "Password your client must confirm to you:",
-    "description": "Password the client must confirm to advisor"
+  "passkey_advisor_from_client": {
+    "message": "Passkey your client must confirm to you:",
+    "description": "Passkey the client must confirm to advisor"
   },
   "updating": {
     "message": "Updating...",
-    "description": "Message during password update"
+    "description": "Message during passkey update"
   }
 }

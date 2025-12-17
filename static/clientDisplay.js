@@ -6,7 +6,7 @@ export const clientDisplay = (clientAuthDiv, data, localizeContent) => {
         * inside the advisor interface.
         *
         * This function dynamically builds the DOM structure
-        * for client details, passwords, and countdown timer,
+        * for client details, passkeys, and countdown timer,
         * then applies internationalization.
         *
         * @param {HTMLElement} clientAuthDiv - Container element for client data.
@@ -60,39 +60,39 @@ export const clientDisplay = (clientAuthDiv, data, localizeContent) => {
     const boxesDiv = document.createElement('div');
     boxesDiv.classList.add('boxes');
 
-    // Client Password Box
-    const clientPwdBox = document.createElement('div');
-    clientPwdBox.classList.add('password-box');
-    const clientPwdInstruction = document.createElement('div');
-    clientPwdInstruction.classList.add('instruction');
-    clientPwdInstruction.setAttribute('data-i18n', 'password_advisor_from_client');
-    clientPwdBox.appendChild(clientPwdInstruction);
-    const clientPwdDiv = document.createElement('div');
-    clientPwdDiv.classList.add('password');
-    const clientPwdSpan = document.createElement('span');
-    clientPwdSpan.id = 'client_pwd';
-    clientPwdSpan.classList.add('display-layer');
-    clientPwdSpan.textContent = data.client.user_pwd;
-    clientPwdDiv.appendChild(clientPwdSpan);
-    clientPwdBox.appendChild(clientPwdDiv);
-    boxesDiv.appendChild(clientPwdBox);
+    // Client Passkey Box
+    const clientPasskeyBox = document.createElement('div');
+    clientPasskeyBox.classList.add('passkey-box');
+    const clientPasskeyInstruction = document.createElement('div');
+    clientPasskeyInstruction.classList.add('instruction');
+    clientPasskeyInstruction.setAttribute('data-i18n', 'passkey_advisor_from_client');
+    clientPasskeyBox.appendChild(clientPasskeyInstruction);
+    const clientPasskeyDiv = document.createElement('div');
+    clientPasskeyDiv.classList.add('passkey');
+    const clientPasskeySpan = document.createElement('span');
+    clientPasskeySpan.id = 'client_passkey';
+    clientPasskeySpan.classList.add('display-layer');
+    clientPasskeySpan.textContent = data.client.user_passkey;
+    clientPasskeyDiv.appendChild(clientPasskeySpan);
+    clientPasskeyBox.appendChild(clientPasskeyDiv);
+    boxesDiv.appendChild(clientPasskeyBox);
 
-    // Advisor Password Box
-    const advisorPwdBox = document.createElement('div');
-    advisorPwdBox.classList.add('password-box');
-    const advisorPwdInstruction = document.createElement('div');
-    advisorPwdInstruction.classList.add('instruction');
-    advisorPwdInstruction.setAttribute('data-i18n', 'password_advisor_to_client');
-    advisorPwdBox.appendChild(advisorPwdInstruction);
-    const advisorPwdDiv = document.createElement('div');
-    advisorPwdDiv.classList.add('password');
-    const advisorPwdSpan = document.createElement('span');
-    advisorPwdSpan.id = 'advisor_client_pwd';
-    advisorPwdSpan.classList.add('display-layer');
-    advisorPwdSpan.textContent = data.advisor_client.advisor_pwd;
-    advisorPwdDiv.appendChild(advisorPwdSpan);
-    advisorPwdBox.appendChild(advisorPwdDiv);
-    boxesDiv.appendChild(advisorPwdBox);
+    // Advisor Passkey Box
+    const advisorPasskeyBox = document.createElement('div');
+    advisorPasskeyBox.classList.add('passkey-box');
+    const advisorPasskeyInstruction = document.createElement('div');
+    advisorPasskeyInstruction.classList.add('instruction');
+    advisorPasskeyInstruction.setAttribute('data-i18n', 'passkey_advisor_to_client');
+    advisorPasskeyBox.appendChild(advisorPasskeyInstruction);
+    const advisorPasskeyDiv = document.createElement('div');
+    advisorPasskeyDiv.classList.add('passkey');
+    const advisorPasskeySpan = document.createElement('span');
+    advisorPasskeySpan.id = 'advisor_client_passkey';
+    advisorPasskeySpan.classList.add('display-layer');
+    advisorPasskeySpan.textContent = data.advisor_client.advisor_passkey;
+    advisorPasskeyDiv.appendChild(advisorPasskeySpan);
+    advisorPasskeyBox.appendChild(advisorPasskeyDiv);
+    boxesDiv.appendChild(advisorPasskeyBox);
 
     clientAuthDetailsDiv.appendChild(boxesDiv);
 

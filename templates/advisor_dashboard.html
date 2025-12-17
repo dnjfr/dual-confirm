@@ -34,7 +34,7 @@
     </div>
 
     <script type="module">
-        import { updatePasswords } from './static/updatePasswords.js';
+        import { updatePasskeys } from './static/updatePasskeys.js';
         import { resetTimer } from "./static/timerManagement.js";
         import { clientDisplay } from './static/clientDisplay.js';
         import { initI18n, localizeContent } from "./static/localization/localizeContent.js";
@@ -51,7 +51,7 @@
             if (currentClientSocket) {
                 // Unsubscribe from all listeners
                 currentClientSocket.off('connect');
-                currentClientSocket.off('update_passwords');
+                currentClientSocket.off('update_passkeys_pairs');
                 currentClientSocket.off('disconnect');
                 
                 // Close the connection completely
@@ -153,12 +153,12 @@
                         clientDisplay(clientAuthDiv, data, localizeContent);
                         
                         // Initialize the socket after rendering the HTML content
-                        const clientPwdElement = document.getElementById("client_pwd");
-                        const advisorPwdElement = document.getElementById("advisor_client_pwd");
+                        const clientPwdElement = document.getElementById("client_passkey");
+                        const advisorPwdElement = document.getElementById("advisor_client_passkey");
                         
-                        // Only initialize passwords if a client is selected
+                        // Only initialize passkeys if a client is selected
                         if (clientPwdElement && advisorPwdElement) {
-                            updatePasswords(currentClientSocket, userId, clientPwdElement, advisorPwdElement);
+                            updatePasskeys(currentClientSocket, userId, clientPwdElement, advisorPwdElement);
                         }
                     })
                     .catch(error => {

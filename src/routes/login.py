@@ -4,7 +4,7 @@ from flask import abort, redirect, render_template, url_for, request, session
 from extensions import app, socketio, otp_manager
 from src.db_management.db_configurations import users_db_cursor, users_advisors_tablename,  users_passwords_db_cursor, users_passwords_tablename, advisors_passwords_db_cursor ,advisors_passwords_tablename, redis_users_sessions, redis_set, redis_get
 from src.user_session.validate_socketio_session import validate_socketio_session
-from passwords_generation import generate_password_on_demand, get_password_and_timer
+from passkeys_pairs_generation import generate_passkeys_pairs_on_demand, get_passkeys_pairs_and_timer
 
 # Length of a session before disconnection
 session_duration = 900
@@ -130,10 +130,10 @@ def login():
                 session['advisor_id'] = advisor_result[0]
                 session['jwt_token'] = otp_result
                 
-                # Generate passwords on demand
-                passwords = get_password_and_timer(session['user_id'], session['advisor_id'])
-                if not passwords['user_pwd'] or passwords['user_ttl'] <= 0:
-                    generate_password_on_demand(session['user_id'], session['advisor_id'])
+                # Generate passkeys on demand
+                passkeys = get_passkeys_pairs_and_timer(session['user_id'], session['advisor_id'])
+                if not passkeys['user_passkey'] or passkeys['user_ttl'] <= 0:
+                    generate_passkeys_pairs_on_demand(session['user_id'], session['advisor_id'])
                     
                 # Add connection state in Redis
                 connection_key = f"connection_status:{session['role']}:{username}"

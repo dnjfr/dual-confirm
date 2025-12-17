@@ -43,13 +43,13 @@
     "message": "Authentification",
     "description": "Titre de la box d'authentification"
   },
-  "password_client_to_advisor" : {
-    "message": "Mot de passe à confirmer à votre conseiller :",
-    "description": "Mot de passe à confirmer au conseiller"
+  "passkey_client_to_advisor" : {
+    "message": "Mot clé à confirmer à votre conseiller :",
+    "description": "Mot clé à confirmer au conseiller"
   },
-  "password_client_from_advisor" : {
-    "message": "Mot de passe que votre conseiller doit vous confirmer :",
-    "description": "Mot de passe que le conseiller doit confirmer au client"
+  "passkey_client_from_advisor" : {
+    "message": "Mot clé que votre conseiller doit vous confirmer :",
+    "description": "Mot clé que le conseiller doit confirmer au client"
   },
   "advisor_dashboard" : {
     "message": "Dashboard Conseiller",
@@ -67,16 +67,16 @@
     "message": "Nom du client :",
     "description": "Nom du client"
   },
-  "password_advisor_to_client" : {
-    "message": "Mot de passe à confirmer à votre client :",
-    "description": "Mot de passe que le conseiller doit confirmer au client"
+  "passkey_advisor_to_client" : {
+    "message": "Mot clé à confirmer à votre client :",
+    "description": "Mot clé que le conseiller doit confirmer au client"
   },
-  "password_advisor_from_client" : {
-    "message": "Mot de passe que votre client doit vous confirmer :",
-    "description": "Mot de passe que le client doit confirmer au conseiller"
+  "passkey_advisor_from_client" : {
+    "message": "Mot clé que votre client doit vous confirmer :",
+    "description": "Mot clé que le client doit confirmer au conseiller"
   },
   "updating": {
     "message": "Actualisation en cours...",
-    "description": "Message lors de l'actualisation des mots de passe"
+    "description": "Message lors de l'actualisation des mots clé"
   }
 }

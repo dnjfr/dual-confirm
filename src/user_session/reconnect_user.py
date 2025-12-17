@@ -2,7 +2,7 @@ from flask import session
 from extensions import app, socketio
 from src.db_management.db_configurations import redis_get, redis_set, redis_users_sessions
 from src.user_session.common import get_identifier_and_role
-from passwords_generation import generate_password_on_demand, get_password_and_timer
+from passkeys_pairs_generation import generate_passkeys_pairs_on_demand, get_passkeys_pairs_and_timer
 
 
 
@@ -13,7 +13,7 @@ def handle_reconnect_user(data):
     Handles user reconnection after a temporary disconnection state.
     
     If the user was marked as "disconnecting", the status is reset to
-    "active" and passwords are regenerated only if required.
+    "active" and passkeys pairs are regenerated only if required.
     
     Args:
         data (dict): Payload containing user identification data.
@@ -36,13 +36,13 @@ def handle_reconnect_user(data):
             
             app.logger.info(f"{identifier} reconnected. Status reset to active.")
             
-            # Regenerate passwords only if necessary
+            # Regenerate passkeys pairs only if necessary
             if role == 'client':
                 
-                # First check if passwords really need to be regenerated
-                current_passwords = get_password_and_timer(user_id, advisor_id)
-                if not current_passwords['user_pwd'] or current_passwords['user_ttl'] <= 0:
-                    generate_password_on_demand(user_id, advisor_id)
+                # First check if passkeys pairs really need to be regenerated
+                current_passwords = get_passkeys_pairs_and_timer(user_id, advisor_id)
+                if not current_passwords['user_passkey'] or current_passwords['user_ttl'] <= 0:
+                    generate_passkeys_pairs_on_demand(user_id, advisor_id)
             
             return {"status": "reconnected"}
         

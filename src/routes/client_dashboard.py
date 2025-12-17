@@ -3,7 +3,7 @@ from src.routes.login import login_required
 from extensions import app, otp_manager
 from src.authentification.jwt_requirement import jwt_required
 from src.db_management.db_configurations import users_db_cursor, users_tablename, advisors_tablename, users_advisors_tablename
-from passwords_generation import get_password_and_timer
+from passkeys_pairs_generation import get_passkeys_pairs_and_timer
 
 
 @app.route("/client-dashboard")
@@ -44,7 +44,7 @@ def client_dashboard():
     client_address = f"{user_info[6]}"
     client_city = f"{user_info[7]} - {user_info[8]}"
     client_email = f"{user_info[9]}"
-    client_data = get_password_and_timer(user_id=user_info[5], advisor_id=user_info[4])
+    client_data = get_passkeys_pairs_and_timer(user_id=user_info[5], advisor_id=user_info[4])
     
     return render_template(
         "client_dashboard.html",

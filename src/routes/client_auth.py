@@ -3,7 +3,7 @@ from src.routes.login import login_required
 from extensions import app, otp_manager
 from src.authentification.jwt_requirement import jwt_required
 from src.db_management.db_configurations import users_db_cursor, users_tablename, advisors_tablename, users_advisors_tablename, redis_users_sessions
-from passwords_generation import generate_password_on_demand, get_password_and_timer
+from passkeys_pairs_generation import generate_passkeys_pairs_on_demand, get_passkeys_pairs_and_timer
 
 
 @app.route("/client-auth")
@@ -40,9 +40,9 @@ def client_auth():
     
     # Generate passwords on demand
     if selection_key != f"selection_status:{advisor_id}:Empty" :
-        passwords = get_password_and_timer(user_id, advisor_id)
-        if not passwords['user_pwd'] or passwords['user_ttl'] <= 0:
-            generate_password_on_demand(user_id, advisor_id)
+        passwords = get_passkeys_pairs_and_timer(user_id, advisor_id)
+        if not passwords['user_passkey'] or passwords['user_ttl'] <= 0:
+            generate_passkeys_pairs_on_demand(user_id, advisor_id)
     
     
     # Load customer and advisor details
@@ -59,8 +59,8 @@ def client_auth():
     if not user_info:
         return "User or advisor not found", 404
     
-    client_data = get_password_and_timer(user_id=user_id, advisor_id=advisor_id)
-    advisor_client_data = get_password_and_timer(user_id=user_id, advisor_id=advisor_id)
+    client_data = get_passkeys_pairs_and_timer(user_id=user_id, advisor_id=advisor_id)
+    advisor_client_data = get_passkeys_pairs_and_timer(user_id=user_id, advisor_id=advisor_id)
     
     return {
         "client_name": f"{user_info[0]} {user_info[1]}",

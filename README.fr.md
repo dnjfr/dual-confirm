@@ -14,7 +14,7 @@
 <img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white" />
 </p>
 
-Un système d'authentification sécurisé pour les institutions critiques qui génère des mots de passe dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors d'appels téléphoniques.
+Un système d'authentification sécurisé pour les institutions critiques qui choisi des mots clé dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors d'appels téléphoniques.
 
 ## 👩‍💻 Table des matières
 
@@ -38,31 +38,31 @@ L'objectif est de remettre le conseiller et le client au cœur de l'authentifica
 
 ## 🔑 Fonctionnalités principales
 
-- **Génération de mots de passe dynamiques**
-  - Génération en temps réel de mots de passe uniques pour chaque paire client-conseiller
-  - Les mots de passe changent toutes les 30 secondes pendant que les utilisateurs sont actifs
+- **Choix de mots clé dynamiques**
+  - Choix en temps réel de mots clé uniques pour chaque paire client-conseiller
+  - Les mots clé changent toutes les 30 secondes pendant que les utilisateurs sont actifs
   - Utilise des mots courants du dictionnaire (min 6 - max 9 lettres) pour une meilleure mémorisation
-  - Système évolutif capable de gérer des milliers de paires de mots de passe simultanément
+  - Système évolutif capable de gérer des milliers de paires de mots clé simultanément
 
 - **Flux d'authentification double**
   - Chaque client a son propre mot de passe unique
-  - Chaque conseiller voit des mots de passe distincts pour chacun de ses clients
+  - Chaque conseiller voit des mots clé distincts pour chacun de ses clients
   - Processus de vérification mutuelle pendant les appels téléphoniques
   - Synchronisation en temps réel entre les interfaces client et conseiller
 
 - **Architecture et considérations de sécurité**
   - Isolation des infrastructures
-    - Instances Redis séparées pour les mots courants, les paires de mots de passe et les sessions utilisateurs
+    - Instances Redis séparées pour les mots courants, les paires de mots clé et les sessions utilisateurs
     - Bases de données PostgreSQL séparées pour la gestion des utilisateurs et l'audit
     - Toutes les instances de base de données fonctionnent sur des conteneurs Docker isolés
   - Gestion de l'authentification et des sessions
     - Authentification basée sur JWT
-    - Rotation automatique des mots de passe toutes les 30 secondes
+    - Rotation automatique des mots clé toutes les 30 secondes
     - Gestion complète des sessions avec timeouts automatiques
-    - Journalisation complète de toutes les tentatives d'authentification et générations de mots de passe
+    - Journalisation complète de toutes les tentatives d'authentification et choixs de mots clé
   - Chiffrement et protection des données
     - Support HTTPS avec chiffrement SSL/TLS pour toutes les communications
-    - Hachage des mots de passe avec bcrypt
+    - Hachage des mots clé avec bcrypt
 
 - **Gestion avancée des sessions**
   - Timeout automatique des sessions après 180 secondes d'inactivité
@@ -88,14 +88,14 @@ Conseiller : "Mon mot de passe est 'diamant'."
 
 ### Bases de données Redis
 1. **Base de données des mots courants (Instance 1)**
-   - Stocke les mots du dictionnaire pour la génération des mots de passe
+   - Stocke les mots du dictionnaire pour le choix des mots clé
    - Format des clés : `word:word_id`
 
-2. **Base de données des paires de mots de passe (Instance 2)**
-   - Stocke les mots de passe temporaires générés
+2. **Base de données des paires de mots clé (Instance 2)**
+   - Stocke les mots clé temporaires générés
    - Formats des clés :
-     - Client : `password:user:<user_id>:advisor:<advisor_id>`
-     - Conseiller : `password:advisor:<advisor_id>:user:<user_id>`
+     - Client : `passkey:user:<user_id>:advisor:<advisor_id>`
+     - Conseiller : `passkey:advisor:<advisor_id>:user:<user_id>`
 
 3. **Base de données des sessions utilisateurs (Instance 3)**
    - Gère les sessions actives et les états de connexion
@@ -116,7 +116,7 @@ Conseiller : "Mon mot de passe est 'diamant'."
 
 2. **Base de données d'audit**
    - Tables :
-     - `passwords_audit` : Historique de génération des mots de passe
+     - `passkeys_audit` : Historique du choix des mots clé
      - `users_sessions_audit` : Suivi des sessions et événements de sécurité
 
 ## 🚀 Pour commencer
@@ -177,16 +177,16 @@ POSTGRES_DB_NAME_AUDIT=DC_PG_AUDIT
 POSTGRES_DB_AUDIT_PORT=5431
 POSTGRES_DB_AUDIT_USER=<votre_identifiant_pour_base_audit>
 POSTGRES_DB_AUDIT_PASSWORD=<votre_mot_de_passe_pour_base_audit>
-POSTGRES_DB_AUDIT_TABLENAME_PASSWORDS_GENERATION_AUDIT=passwords_generation_audit
+POSTGRES_DB_AUDIT_TABLENAME_PASSKEYS_PAIRS_GENERATION_AUDIT=passkeys_pairs_generation_audit
 POSTGRES_DB_AUDIT_TABLENAME_USERS_SESSIONS_AUDIT=users_sessions_audit
 
 REDIS_DB_WORDS_PORT=6379
 REDIS_DB_WORDS_USER=<votre_identifiant_pour_base_mots_courants>
 REDIS_DB_WORDS_PASSWORD=<votre_mot_de_passe_pour_base_mots_courants>
 
-REDIS_DB_PASSWORDS_PORT=6389
-REDIS_DB_PASSWORDS_USER=<votre_identifiant_pour_base_mots_de_passe_générés>
-REDIS_DB_PASSWORDS_PASSWORD=<votre_mot_de_passe_pour_base_mots_de_passe_générés>
+REDIS_DB_PASSKEYS_PAIRS_PORT=6389
+REDIS_DB_PASSKEYS_PAIRS_USER=<votre_identifiant_pour_base_mots_clé_générés>
+REDIS_DB_PASSKEYS_PAIRS_PASSWORD=<votre_mot_de_passe_pour_base_mots_clé_générés>
 
 REDIS_DB_USERS_SESSIONS_PORT=6399
 REDIS_DB_USERS_SESSIONS_USER=<votre_identifiant_pour_base_session_utilisateur>
@@ -255,7 +255,7 @@ docker compose up -d
   - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
 
   **8.6.** Créez la base de données dans le serveur postgres-audit :
-  - Base d'audit des paires de mots de passe et des sessions utilisateurs : DC_PG_AUDIT
+  - Base d'audit des paires de mots clé et des sessions utilisateurs : DC_PG_AUDIT
 </details>
 
 **9.** Configurez les instances Redis :
@@ -263,7 +263,7 @@ docker compose up -d
   <summary>Configuration Redis ⬇️</summary>
   <br>
 
-  Chaque conteneur Redis est une instance indépendante, utilisée comme une base de données dédiée pour une fonction spécifique : mots communs, mots de passe, ou sessions.
+  Chaque conteneur Redis est une instance indépendante, utilisée comme une base de données dédiée pour une fonction spécifique : mots communs, mots clé, ou sessions.
 
   **9.1.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
 
@@ -288,7 +288,7 @@ docker compose up -d
   **9.3.** Configurez l'instance de base de données des mots de passe :
   - Hôte : 172.25.0.3
   - Port : 6379
-  - Alias base de données : DC_RD_PASSWORDS
+  - Alias base de données : DC_RD_PASSKEYS
   - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
   - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
   - Cliquez sur "Use TLS"
@@ -314,8 +314,8 @@ python setup_db_creation_population.py
 
 **11.** Ouvrez deux terminaux (vérifiez bien que les deux terminaux ont `.venv` activés) et démarrez l'application :
 ```bash
-# Terminal 1 : Démarrez le service de génération de mots de passe
-python passwords_generation.py
+# Terminal 1 : Démarrez le service du choix de mots clés
+python passkeys_pairs_generation.py
 
 # Terminal 2 : Démarrez l'application principale
 python app.py
