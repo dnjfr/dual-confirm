@@ -1,6 +1,6 @@
 
 
-# DualConfirm - Dynamic password authentication system
+# DualConfirm - Dynamic passkey double authentication vocal system
 <p align="center">
 <a href="README.md"><img src="https://img.shields.io/badge/English-green.svg" /></a>
 <a href="README.fr.md"><img src="https://img.shields.io/badge/French-fr-blue.svg" /></a>
@@ -16,7 +16,7 @@
 </p>
 
 
-A secure authentication system for critical institutions that generates synchronized, time-based dynamic passwords for both clients and advisors to verify each other's identity during phone calls.
+A secure authentication system for critical institutions that chooses synchronized, time-based dynamic passkeys for both clients and advisors to verify each other's identity during phone calls.
 
 ## 👩‍💻 Table of Contents
 
@@ -41,31 +41,31 @@ The goal is to put both the advisor and the client at the center of the authenti
 
 ## 🔑 Key Features
 
-- **Dynamic password generation**
-  - Real-time generation of unique passwords for each client-advisor pair
-  - Passwords change every 30 seconds while users are active
+- **Dynamic passkey choice**
+  - Real-time choice of unique passkeys for each client-advisor pair
+  - Passkeys change every 30 seconds while users are active
   - Uses common dictionary words (min 6 - max 9 letters) for better memorability
-  - Scalable system capable of handling thousands of simultaneous password pairs
+  - Scalable system capable of handling thousands of simultaneous passkey pairs
 
 - **Dual authentication flow**
-  - Each client has their own unique password
-  - Each advisor sees distinct passwords for each of their clients
+  - Each client has their own unique passkey
+  - Each advisor sees distinct passkeys for each of their clients
   - Mutual verification process during phone calls
   - Real-time synchronization between client and advisor interfaces
 
 - **Security Architecture & Considerations**
   - Infrastructure Isolation
-    - Separate Redis instances for common words, password pairs, and user sessions
+    - Separate Redis instances for common words, passkey pairs, and user sessions
     - Segregated PostgreSQL databases for user management and audit logging
     - All database instances run on isolated Docker containers
   - Authentication & Session Management
     - JWT-based authentication
-    - Automatic password rotation every 30 seconds
+    - Automatic passkey rotation every 30 seconds
     - Complete session management with automatic timeouts
-    - Comprehensive audit logging of all authentication attempts and password generations
+    - Comprehensive audit logging of all authentication attempts and passkey pairs generations
   - Encryption & Data Protection
     - HTTPS support with SSL/TLS encryption for all communications
-    - Password hashing using bcrypt
+    - Users and advisors passwords hashing using bcrypt
 
 - **Advanced session management**
   - Automatic session timeout after 180 seconds of inactivity
@@ -76,28 +76,28 @@ The goal is to put both the advisor and the client at the center of the authenti
 ## 📞 Example Usage
 ```
 Client: "Hello, this is Mr. Smth."
-Advisor: "Hello Mr. Smth, this is Mr. Williams from Fictional Company. Could you confirm your client password shown on your interface?"
-Client: "My password is 'weather'. Could you confirm your advisor password?"
-Advisor: "My password is 'diamond'."
+Advisor: "Hello Mr. Smth, this is Mr. Williams from Fictional Company. Could you confirm your client passkey shown on your interface?"
+Client: "My passkey is 'weather'. Could you confirm your advisor passkey?"
+Advisor: "My passkey is 'diamond'."
 ```
 ## 🏗️ Architecture
 
 ### Global scheme
 
 <p align="center">
-<img width="1000" src="/git-img/global-scheme.png"/>
+<img width="1000" src="/git-img/global-scheme-en.png"/>
 </p>
 
 ### Redis databases
 1. **Common words database (Instance 1)**
-   - Stores dictionary words for password generation
+   - Stores dictionary words for passkey choice
    - Key format: `word:word_id`
 
-2. **Password pairs database (Instance 2)**
-   - Stores temporary generated passwords
+2. **Passkey pairs database (Instance 2)**
+   - Stores temporary generated passkeys pairs
    - Key formats:
-     - Client: `password:user:<user_id>:advisor:<advisor_id>`
-     - Advisor: `password:advisor:<advisor_id>:user:<user_id>`
+     - Client: `passkey:user:<user_id>:advisor:<advisor_id>`
+     - Advisor: `passkey:advisor:<advisor_id>:user:<user_id>`
 
 3. **Users sessions database (Instance 3)**
    - Manages active sessions and connection states
@@ -118,7 +118,7 @@ Advisor: "My password is 'diamond'."
 
 2. **Audit database**
    - Tables:
-     - `passwords_audit`: Password generation history
+     - `passkeys_pairs_generation_audit`: Passkeys pairs generation history
      - `users_sessions_audit`: Session tracking and security events
 
 ## 🚀 Getting Started
@@ -257,7 +257,7 @@ docker compose up -d
   - Avisors passwords base : DC_PG_ADVISORS_PASSWORDS
 
   **8.6.** Create the database in server postgres-audit :  
-  - Passwords pair and users sessions audit base : DC_PG_AUDIT
+  - Passkeys pair and users sessions audit base : DC_PG_AUDIT
 </details>
 
 
@@ -266,7 +266,7 @@ docker compose up -d
   <summary>Redis Setup ⬇️</summary>
   <br>
 
-  Each Redis container is an independent instance, used as a dedicated database for a specific purpose: common words, passwords, or sessions.
+  Each Redis container is an independent instance, used as a dedicated database for a specific purpose: common words, passkeys pairs, or sessions.
 
   **9.1.** Access RedisInsight at <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> and click on "Add Redis database"
 

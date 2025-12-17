@@ -1,4 +1,4 @@
-# DualConfirm - Système d'authentification par mot de passe dynamique
+# DualConfirm - Système de double authentification vocale par mot-clé dynamique
 
 <p align="center">
 <a href="README.md"><img src="https://img.shields.io/badge/English-green.svg" /></a>
@@ -14,7 +14,7 @@
 <img src="https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white" />
 </p>
 
-Un système d'authentification sécurisé pour les institutions critiques qui choisi des mots clé dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors d'appels téléphoniques.
+Un système d'authentification sécurisé pour les institutions critiques qui choisi des mots-clé dynamiques synchronisés et basés sur le temps, permettant aux clients et aux conseillers de vérifier mutuellement leur identité lors d'appels téléphoniques.
 
 ## 👩‍💻 Table des matières
 
@@ -38,31 +38,31 @@ L'objectif est de remettre le conseiller et le client au cœur de l'authentifica
 
 ## 🔑 Fonctionnalités principales
 
-- **Choix de mots clé dynamiques**
-  - Choix en temps réel de mots clé uniques pour chaque paire client-conseiller
-  - Les mots clé changent toutes les 30 secondes pendant que les utilisateurs sont actifs
+- **Choix de mots-clé dynamiques**
+  - Choix en temps réel de mots-clé uniques pour chaque paire client-conseiller
+  - Les mots-clé changent toutes les 30 secondes pendant que les utilisateurs sont actifs
   - Utilise des mots courants du dictionnaire (min 6 - max 9 lettres) pour une meilleure mémorisation
-  - Système évolutif capable de gérer des milliers de paires de mots clé simultanément
+  - Système évolutif capable de gérer des milliers de paires de mots-clé simultanément
 
 - **Flux d'authentification double**
-  - Chaque client a son propre mot de passe unique
-  - Chaque conseiller voit des mots clé distincts pour chacun de ses clients
+  - Chaque client a son propre mot-clé unique
+  - Chaque conseiller voit des mots-clé distincts pour chacun de ses clients
   - Processus de vérification mutuelle pendant les appels téléphoniques
   - Synchronisation en temps réel entre les interfaces client et conseiller
 
 - **Architecture et considérations de sécurité**
   - Isolation des infrastructures
-    - Instances Redis séparées pour les mots courants, les paires de mots clé et les sessions utilisateurs
+    - Instances Redis séparées pour les mots courants, les paires de mots-clé et les sessions utilisateurs
     - Bases de données PostgreSQL séparées pour la gestion des utilisateurs et l'audit
     - Toutes les instances de base de données fonctionnent sur des conteneurs Docker isolés
   - Gestion de l'authentification et des sessions
     - Authentification basée sur JWT
-    - Rotation automatique des mots clé toutes les 30 secondes
+    - Rotation automatique des mots-clé toutes les 30 secondes
     - Gestion complète des sessions avec timeouts automatiques
-    - Journalisation complète de toutes les tentatives d'authentification et choixs de mots clé
+    - Journalisation complète de toutes les tentatives d'authentification et paires mots-clé générées
   - Chiffrement et protection des données
     - Support HTTPS avec chiffrement SSL/TLS pour toutes les communications
-    - Hachage des mots clé avec bcrypt
+    - Hachage des mots de passes clients et conseillers avec bcrypt
 
 - **Gestion avancée des sessions**
   - Timeout automatique des sessions après 180 secondes d'inactivité
@@ -73,9 +73,9 @@ L'objectif est de remettre le conseiller et le client au cœur de l'authentifica
 ## 📞 Exemple d'utilisation
 ```
 Client : "Bonjour, c'est M. Dupont."
-Conseiller : "Bonjour M. Dupont, c'est M. Martin de Société Fictive. Pourriez-vous me confirmer votre mot de passe client affiché sur votre interface ?"
-Client : "Mon mot de passe est 'météo'. Pourriez-vous confirmer votre mot de passe conseiller ?"
-Conseiller : "Mon mot de passe est 'diamant'."
+Conseiller : "Bonjour M. Dupont, c'est M. Martin de Société Fictive. Pourriez-vous me confirmer votre mot-clé client affiché sur votre interface ?"
+Client : "Mon mot-clé est 'météo'. Pourriez-vous confirmer votre mot-clé conseiller ?"
+Conseiller : "Mon mot-clé est 'diamant'."
 ```
 
 ## 🏗️ Architecture
@@ -83,16 +83,16 @@ Conseiller : "Mon mot de passe est 'diamant'."
 ### Schéma global
 
 <p align="center">
-<img width="1000" src="/git-img/global-scheme.png"/>
+<img width="1000" src="/git-img/global-scheme-fr.png"/>
 </p>
 
 ### Bases de données Redis
 1. **Base de données des mots courants (Instance 1)**
-   - Stocke les mots du dictionnaire pour le choix des mots clé
+   - Stocke les mots du dictionnaire pour le choix des mots-clé
    - Format des clés : `word:word_id`
 
-2. **Base de données des paires de mots clé (Instance 2)**
-   - Stocke les mots clé temporaires générés
+2. **Base de données des paires de mots-clé (Instance 2)**
+   - Stocke les paires de mots-clé temporaires générés
    - Formats des clés :
      - Client : `passkey:user:<user_id>:advisor:<advisor_id>`
      - Conseiller : `passkey:advisor:<advisor_id>:user:<user_id>`
@@ -116,7 +116,7 @@ Conseiller : "Mon mot de passe est 'diamant'."
 
 2. **Base de données d'audit**
    - Tables :
-     - `passkeys_audit` : Historique du choix des mots clé
+     - `passkeys_pairs_generation_audit` : Historique de la génération des paires de mots-clé
      - `users_sessions_audit` : Suivi des sessions et événements de sécurité
 
 ## 🚀 Pour commencer
@@ -255,7 +255,7 @@ docker compose up -d
   - Base des mots de passe conseillers : DC_PG_ADVISORS_PASSWORDS
 
   **8.6.** Créez la base de données dans le serveur postgres-audit :
-  - Base d'audit des paires de mots clé et des sessions utilisateurs : DC_PG_AUDIT
+  - Base d'audit des paires de mots-clé et des sessions utilisateurs : DC_PG_AUDIT
 </details>
 
 **9.** Configurez les instances Redis :
@@ -263,7 +263,7 @@ docker compose up -d
   <summary>Configuration Redis ⬇️</summary>
   <br>
 
-  Chaque conteneur Redis est une instance indépendante, utilisée comme une base de données dédiée pour une fonction spécifique : mots communs, mots clé, ou sessions.
+  Chaque conteneur Redis est une instance indépendante, utilisée comme une base de données dédiée pour une fonction spécifique : mots communs, paires de mots-clé, ou sessions.
 
   **9.1.** Accédez à RedisInsight sur <a href="http://localhost:5540/" target="_blank">http://localhost:5540/</a> et cliquez sur "Add Redis database"
 
@@ -285,12 +285,12 @@ docker compose up -d
   - Dans le champ "Client Certificate", collez le contenu du fichier `cert.pem`
   - Dans le champ "Private Key", collez le contenu du fichier `key.pem`
 
-  **9.3.** Configurez l'instance de base de données des mots de passe :
+  **9.3.** Configurez l'instance de base de données des mots-clé :
   - Hôte : 172.25.0.3
   - Port : 6379
-  - Alias base de données : DC_RD_PASSKEYS
-  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_de_passe_générés>`
-  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_de_passe_générés>`
+  - Alias base de données : DC_RD_PASSKEYS_PAIRS
+  - Nom d'utilisateur : `<votre_identifiant_pour_base_mots_clé_générés>`
+  - Mot de passe : `<votre_mot_de_passe_pour_base_mots_clé_générés>`
   - Cliquez sur "Use TLS"
   - Cliquez sur "Verify TLS Certificate" et "Requires TLS Client Authentication"
   - Vous pouvez maintenant choisir les certificats « Redis CA » et « Redis Client » précédemment générés
@@ -314,7 +314,7 @@ python setup_db_creation_population.py
 
 **11.** Ouvrez deux terminaux (vérifiez bien que les deux terminaux ont `.venv` activés) et démarrez l'application :
 ```bash
-# Terminal 1 : Démarrez le service du choix de mots clés
+# Terminal 1 : Démarrez le service du choix de mots-clés
 python passkeys_pairs_generation.py
 
 # Terminal 2 : Démarrez l'application principale

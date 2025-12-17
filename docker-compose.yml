@@ -15,9 +15,9 @@ services:
       - ./ssl_certificates:/etc/redis/certs
     command: redis-server /usr/local/etc/redis/redis.conf
   
-  redis-passwords:
+  redis-passkeys-pairs:
     image: redis:latest
-    container_name: redis-passwords
+    container_name: redis-passkeys-pairs
     ports:
       - "6389:6379"
     env_file:
@@ -26,8 +26,8 @@ services:
       global_network:
         ipv4_address: 172.25.0.3
     volumes:
-      - ./databases/redis/redis-passwords-data:/data
-      - ./databases/redis/redis-conf/redis-passwords-conf:/usr/local/etc/redis
+      - ./databases/redis/redis-passkeys-pairs-data:/data
+      - ./databases/redis/redis-conf/redis-passkeys-pairs-conf:/usr/local/etc/redis
       - ./ssl_certificates:/etc/redis/certs
     command: redis-server /usr/local/etc/redis/redis.conf
 
@@ -94,7 +94,7 @@ services:
     container_name: redisinsight
     depends_on:
       - redis-words
-      - redis-passwords
+      - redis-passkeys-pairs
       - redis-users-sessions
     ports:
       - "5540:5540"
